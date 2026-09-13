@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Bat &amp; Ball Cricket</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; }
+  body {
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:linear-gradient(#0c1a2b, #1a3a5c);
+    color:#fff;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden; user-select:none; -webkit-user-select:none;
+    overscroll-behavior:none; touch-action:none;
+  }
+  #hud {
+    width:100%; display:flex; justify-content:space-between; align-items:center;
+    padding:10px 0; font-size:clamp(13px,3.6vw,18px);
+  }
+  .score-box{ display:flex; flex-direction:column; align-items:center;
+    background:rgba(255,255,255,.12); border-radius:14px; padding:6px 18px; min-width:104px; }
+  .score-box .lab{ font-size:.7em; letter-spacing:2px; opacity:.75; }
+  .score-box .val{ font-weight:900; font-size:1.45em; color:#f1c40f; }
+  #wrap{ flex:1; width:100%; display:flex; align-items:center; justify-content:center; min-height:0; }
+  canvas {
+    background:#000; border:4px solid rgba(255,255,255,.22); border-radius:14px;
+    box-shadow:0 14px 34px rgba(0,0,0,.55);
+    touch-action:none; cursor:none;
+  }
+  #controls{ width:100%; max-width:820px; padding:10px 12px; display:flex; align-items:center;
+    justify-content:center; gap:14px; flex-wrap:wrap; padding-bottom:calc(12px + env(safe-area-inset-bottom)); }
+  button {
+    padding:11px 28px; font-size:16px; font-weight:800; border:none; border-radius:999px;
+    background:linear-gradient(#f7bb4d, #e67e22); color:#3a2500; cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,0,0,.4); transition:transform .12s, filter .2s;
+  }
+  button:hover{ filter:brightness(1.1); }
+  button:active{ transform:scale(.93); }
+  #hint{ color:#9fb8cd; font-size:clamp(11px,3.2vw,14px); text-align:center; min-height:1.2em; }
+  #credit{ font-size:clamp(13px,3.6vw,18px); font-weight:700; color:#ffd98a;
+    padding:10px 12px 2px; text-align:center; letter-spacing:.4px; text-shadow:0 2px 4px rgba(0,0,0,.5); }
+  #credit b{ color:#ffd700; }
+  #rules{ max-width:820px; padding:4px 14px 12px; font-size:clamp(11px,3vw,13px);
+    color:#bcd4e8; text-align:center; line-height:1.6; }
+  #rules b{ color:#ffe066; }
+</style>
+</head>
+<body>
+  <div id="credit">Prompted by <b>Sri Karthikeya Bhargav</b> &bull; Grade 4 &bull; School: New Era</div>
+  <div id="hud">
+    <div class="score-box"><span class="lab">RUNS</span><span class="val" id="runs">0</span></div>
+    <div class="score-box"><span class="lab">HIGH SCORE</span><span class="val" id="best">0</span></div>
+  </div>
+  <div id="wrap"><canvas id="game"></canvas></div>
+  <div id="controls">
+    <button id="btn">Start Game</button>
+    <div id="hint"></div>
+  </div>
+  <div id="rules"><b>How to play:</b> Drag / swipe (or arrow keys) to move the wooden bat &bull; hit the rubber ball = +1 run &bull; hit the gold sweet spot to smash a <b>SIX</b> (+6 runs) &bull; the ball bounces on the ground &mdash; if it bounces 3 times without a hit, you are OUT &bull; press Restart to play again &amp; beat your high score.</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const runsEl = document.getElementById('runs');
+const bestEl = document.getElementById('best');
+const btnEl = document.getElementById('btn');
+const hintEl = document.getElementById('hint');
+
+let W = 900, H = 560, dpr = 1;
+let gravity, ballR;
+let state = 'ready';
+let score = 0, high = 0;
+let bat = {}, ball = {};
+let particles = [], floaties = [], trail = [];
+let bounceCount = 0, lastHit = false, hitCd = 0;
+let shake = 0, flash = 0, sixT = 0, bigTxt = null, bigTxtSub = null, bigTxtAge = 0;
+let keys = {};
+let dragging = false;
+let AC = null, lastSound = 0;
+
+high = +(localStorage.getItem('batball_hs') || 0);
+bestEl.textContent = high;
+
+function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+function rnd(a, b) { return a + Math.random() * (b - a); }
+
+function rr(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function fit() {
+  const availW = Math.max(300, window.innerWidth - 10);
+  const availH = Math.max(240, window.innerHeight - 200);
+  const ratio = availW / availH;
+  const R = Math.max(0.62, Math.min(ratio, 2.0));
+  let w, h;
+  if (ratio < 1) {
+    w = Math.min(availW, 480);
+    h = Math.min(availH, Math.round(w / R));
+  } else {
+    h = Math.min(availH, 560);
+    w = Math.min(availW, Math.round(h * R));
+  }
+  W = w; H = h;
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function baseSizes() {
+  gravity = H * 0.00078;
+  ballR = Math.max(8, Math.round(H * 0.028));
+  bat.w = Math.max(110, Math.min(210, W * 0.22));
+  bat.h = Math.round(H * 0.045);
+}
+
+function resetBat() {
+  bat.x = W / 2 - bat.w / 2;
+  bat.y = H - bat.h;
+}
+
+function newBall(fromTop) {
+  ball = {
+    x: W / 2 + rnd(-W * 0.2, W * 0.2),
+    y: fromTop ? -ballR : rnd(-ballR, H * 0.2),
+    r: ballR,
+    vx: rnd(-2, 2),
+    vy: fromTop ? rnd(2, 3) : rnd(1.5, 3),
+    spin: 0
+  };
+  lastHit = false;
+  bounceCount = 0;
+  trail = [];
+}
+
+function startGame() {
+  score = 0;
+  bounceCount = 0;
+  lastHit = false;
+  hitCd = 0;
+  particles = [];
+  floaties = [];
+  bigTxt = null; bigTxtSub = null; bigTxtAge = 0;
+  sixT = 0; flash = 0; shake = 0;
+  runsEl.textContent = score;
+  bestEl.textContent = high;
+  state = 'play';
+  resetBat();
+  newBall(true);
+  btnEl.textContent = 'Restart';
+  hintEl.textContent = 'Drag / swipe to move the bat — keep the ball alive!';
+}
+
+function out() {
+  state = 'over';
+  if (score > high) {
+    high = score;
+    localStorage.setItem('batball_hs', high);
+    bestEl.textContent = high;
+  }
+  const isNew = score > 0 && score >= high && score === high && localStorage.getItem('just_broke') !== '1';
+  localStorage.setItem('just_broke', '1');
+  hintEl.textContent = 'Final score: ' + score + ' runs' + (isNew ? '  —  NEW HIGH SCORE!' : '') + '   Tap Play Again.';
+  btnEl.textContent = 'Play Again';
+  bigTxt = 'OUT!';
+  bigTxtAge = 0;
+  bigTxtSub = 'Score: ' + score + ' runs';
+  smallShake(8);
+  beepDown();
+}
+
+function addScore(n) {
+  score += n;
+  runsEl.textContent = score;
+  if (score > high) {
+    high = score;
+    bestEl.textContent = high;
+  }
+}
+
+function collide() {
+  if (hitCd > 0) { hitCd--; return false; }
+  const bx = bat.x, by = bat.y, bw = bat.w, bh = bat.h;
+  const cx = clamp(ball.x, bx, bx + bw);
+  const cy = clamp(ball.y, by, by + bh);
+  const dx = ball.x - cx, dy = ball.y - cy;
+  return dx * dx + dy * dy <= ball.r * ball.r;
+}
+
+function strike() {
+  const offset = (ball.x - (bat.x + bat.w / 2)) / (bat.w / 2);
+  const sweet = Math.abs(offset) < 0.33;
+  lastHit = true;
+  hitCd = 9;
+  if (sweet) {
+    ball.vy = -(H * 0.042 + Math.random() * H * 0.004);
+    ball.vx = offset * 0.35 * H * 0.02;
+  } else {
+    ball.vy = -(H * (0.017 + Math.random() * 0.006));
+    ball.vx = offset * H * 0.02 + rnd(-2, 2);
+  }
+  ball.vx = clamp(ball.vx, -H * 0.035, H * 0.035);
+  ball.x = clamp(ball.x, ball.r, W - ball.r);
+  ball.y = H - bat.h - ball.r - 1;
+  ball.spin = ball.vx * 0.3;
+  bounceCount = 0;
+  addScore(1);
+  sparks(ball.x, ball.y, sweet ? '#ffe066' : '#ffd166');
+  floaty(ball.x, ball.y - 26, sweet ? 'BOOM +1' : '+1', sweet ? '#ffe066' : '#fff');
+  smallShake(sweet ? 5 : 2);
+  beep(sweet ? 520 : 360, 0.07, 'square', 0.18);
+}
+
+function six() {
+  lastHit = false;
+  addScore(5);
+  bigTxt = 'SIX!';
+  bigTxtSub = '+6 runs  POWER HIT';
+  bigTxtAge = 0;
+  sixT = 2.4;
+  flash = 1;
+  smallShake(12);
+  fireworks();
+  confetti();
+  beepSix();
+  newBall(true);
+}
+
+function update(dt) {
+  const s = Math.min(2.5, dt / 16.7);
+  if (sixT > 0) {
+    sixT -= dt / 1000;
+    if (Math.random() < 0.15) burst(rnd(W * 0.2, W * 0.8), rnd(H * 0.1, H * 0.35), '#f1c40f');
+  }
+  if (flash > 0) flash = Math.max(0, flash - dt / 220);
+  if (shake > 0) shake = Math.max(0, shake - dt / 18);
+  updParticles(dt);
+  for (let i = floaties.length - 1; i >= 0; i--) {
+    const f = floaties[i];
+    f.y -= s * 0.9;
+    f.life -= dt;
+    if (f.life <= 0) floaties.splice(i, 1);
+  }
+  if (bigTxt) {
+    if (bigTxt === 'OUT!') {
+      bigTxtAge = (bigTxtAge || 0) + dt;
+      if (bigTxtAge > 3000) { bigTxt = null; bigTxtSub = null; }
+    } else {
+      bigTxtAge = (bigTxtAge || 0) + dt;
+      if (bigTxtAge > 1600) { bigTxt = null; bigTxtSub = null; }
+    }
+  }
+  if (state !== 'play') return;
+
+  if (keys['ArrowLeft']) bat.x = clamp(bat.x - s * 11, 0, W - bat.w);
+  if (keys['ArrowRight']) bat.x = clamp(bat.x + s * 11, 0, W - bat.w);
+
+  ball.vy += gravity * s;
+  ball.x += ball.vx * s;
+  ball.y += ball.vy * s;
+  ball.spin += ball.vx * 0.02;
+
+  trail.unshift({ x: ball.x, y: ball.y });
+  if (trail.length > 8) trail.pop();
+
+  if (ball.x - ball.r < 0) { ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
+  if (ball.x + ball.r > W) { ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
+
+  if (ball.y + ball.r >= H) {
+    ball.y = H - ball.r;
+    ball.vy = -Math.abs(ball.vy) * 0.8;
+    bounceCount++;
+    dust(ball.x, H - 4);
+    smallShake(2);
+    beep(150, 0.05, 'sine', 0.14);
+    if (bounceCount >= 3) { out(); return; }
+  }
+
+  if (collide()) strike();
+
+  if (lastHit && ball.vy < 0 && ball.y + ball.r < 0) {
+    six();
+  }
+}
+
+function updParticles(dt) {
+  const s = Math.min(2.5, dt / 16.7);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx * s;
+    p.y += p.vy * s;
+    p.vy += p.g * s;
+    p.vx *= 0.985;
+    p.life -= dt;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+}
+
+function spark(x, y, dx, dy, color, life, g, size, shape) {
+  particles.push({ x: x, y: y, vx: dx, vy: dy, color: color, life: life, max: life, g: g || 0.08, size: size || 3, shape: shape || 0 });
+}
+
+function sparks(x, y, color) {
+  for (let i = 0; i < 14; i++) {
+    const a = rnd(0, Math.PI * 2);
+    const sp = rnd(2, 6);
+    spark(x, y, Math.cos(a) * sp, Math.sin(a) * sp - 1, i % 2 ? color : '#fff', rnd(350, 650), 0.12, rnd(2, 4));
+  }
+}
+
+function dust(x, y) {
+  for (let i = 0; i < 8; i++) {
+    spark(x + rnd(-30, 30), y, rnd(-3, 3), rnd(-2.5, -0.5), Math.random() < .5 ? '#bca689' : '#8a6b4a', rnd(250, 450), 0.05, rnd(2, 5));
+  }
+}
+
+function burst(x, y, color) {
+  for (let i = 0; i < 22; i++) {
+    const a = rnd(0, Math.PI * 2);
+    const sp = rnd(1, 5);
+    spark(x, y, Math.cos(a) * sp, Math.sin(a) * sp, Math.random() < .5 ? color : '#fff5d1', rnd(500, 900), 0.06, rnd(2, 4));
+  }
+}
+
+function fireworks() {
+  for (let k = 0; k < 6; k++) {
+    const x = rnd(W * 0.15, W * 0.85);
+    const y = rnd(H * 0.08, H * 0.4);
+    const col = ['#f1c40f', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#ff9f43'][k % 6];
+    setTimeout(() => burst(x, y, col), k * 90);
+  }
+}
+
+function confetti() {
+  for (let i = 0; i < 40; i++) {
+    const col = ['#f1c40f', '#e74c3c', '#3498db', '#2ecc71', '#ecf0f1'][i % 5];
+    particles.push({ x: rnd(0, W), y: rnd(-H * 0.4, 0), vx: rnd(-1.5, 1.5), vy: rnd(1.5, 4), color: col, life: rnd(1400, 2600), max: rnd(1400, 2600), g: 0.12, size: rnd(4, 7), shape: 1 });
+  }
+}
+
+function floaty(x, y, text, color) {
+  floaties.push({ x: x, y: y, text: text, color: color, life: 900, max: 900 });
+}
+
+function smallShake(n) { shake = Math.max(shake, n); }
+
+function beep(freq, dur, type, vol) {
+  const now = performance.now();
+  if (now - lastSound < 50) return;
+  lastSound = now;
+  if (!AC) return;
+  const o = AC.createOscillator();
+  const gN = AC.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  gN.gain.setValueAtTime(vol, AC.currentTime);
+  gN.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + dur);
+  o.connect(gN).connect(AC.destination);
+  o.start();
+  o.stop(AC.currentTime + dur + 0.02);
+}
+
+function beepSix() {
+  if (!AC) return;
+  [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => beep(f, 0.14, 'triangle', 0.22), i * 120));
+  beep(262, 0.5, 'sine', 0.1);
+}
+
+function beepDown() {
+  if (!AC) return;
+  [392, 330, 262, 196].forEach((f, i) => setTimeout(() => beep(f, 0.16, 'triangle', 0.18), i * 130));
+}
+
+function pointToGame(e) {
+  const rect = canvas.getBoundingClientRect();
+  return { x: (e.clientX - rect.left) * (W / rect.width), y: (e.clientY - rect.top) * (H / rect.height) };
+}
+
+function draw() {
+  ctx.save();
+  if (shake > 0) ctx.translate(rnd(-shake, shake), rnd(-shake, shake));
+
+  const sky = ctx.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, '#74b9ff');
+  sky.addColorStop(0.5, '#a3d0f5');
+  sky.addColorStop(0.65, '#a8d8a0');
+  sky.addColorStop(1, '#4c9a52');
+  ctx.fillStyle = sky;
+  ctx.fillRect(-20, -20, W + 40, H + 40);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.beginPath();
+  ctx.arc(W * 0.85, H * 0.16, H * 0.05, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.beginPath();
+  ctx.arc(W * 0.2, H * 0.22, H * 0.09, 0, Math.PI * 2);
+  ctx.arc(W * 0.35, H * 0.26, H * 0.07, 0, Math.PI * 2);
+  ctx.arc(W * 0.3, H * 0.18, H * 0.06, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([10, 8]);
+  ctx.beginPath();
+  ctx.moveTo(W * 0.05, H * 0.6);
+  ctx.lineTo(W * 0.95, H * 0.6);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  const fieldY = H * 0.66;
+  const fg = ctx.createLinearGradient(0, fieldY, 0, H);
+  fg.addColorStop(0, '#6fce6f');
+  fg.addColorStop(1, '#2e7d32');
+  ctx.fillStyle = fg;
+  ctx.fillRect(0, fieldY, W, H - fieldY);
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(rnd(0, W), H * 0.68);
+    ctx.lineTo(rnd(0, W), H);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = '#e8d9b0';
+  const pitchW = Math.min(W * 0.13, 90);
+  ctx.fillRect(W / 2 - pitchW / 2, H * 0.72, pitchW, H * 0.28);
+  ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(W / 2 - pitchW / 2, H * 0.72, pitchW, H * 0.28);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(W / 2 - pitchW / 2 - 3, H * 0.96);
+  ctx.lineTo(W / 2 + pitchW / 2 + 3, H * 0.96);
+  ctx.stroke();
+
+  drawTrail();
+  drawParticles();
+  drawBat();
+  drawBall();
+  drawFloaties();
+
+  if (flash > 0) {
+    ctx.fillStyle = 'rgba(255,255,240,' + (flash * 0.55) + ')';
+    ctx.fillRect(-20, -20, W + 40, H + 40);
+  }
+
+  if (state === 'ready') overlay('BAT & BALL', 'Drag / swipe to move the wooden bat.\nHit the rubber ball — turn it into a SIX!');
+  if (state === 'over') overlay('GAME OVER', 'Final score: ' + score + ' runs' + (score >= high && score > 0 ? '   BEST!' : '') + '\nPress Play Again to restart.');
+
+  drawBigTxt();
+  ctx.restore();
+}
+
+function overlay(title, sub) {
+  ctx.fillStyle = 'rgba(8,16,28,0.5)';
+  ctx.fillRect(-20, -20, W + 40, H + 40);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#f1c40f';
+  ctx.font = '900 ' + Math.round(H * 0.085) + 'px Segoe UI, Arial, sans-serif';
+  ctx.shadowColor = 'rgba(0,0,0,.6)';
+  ctx.shadowBlur = 10;
+  ctx.fillText(title, W / 2, H * 0.42);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#fff';
+  ctx.font = '600 ' + Math.round(H * 0.04) + 'px Segoe UI, Arial, sans-serif';
+  const lines = sub.split('\n');
+  lines.forEach((ln, i) => {
+    ctx.fillStyle = i === lines.length - 1 && lines.length > 1 ? '#ffe066' : '#fff';
+    ctx.fillText(ln, W / 2, H * 0.42 + (i + 1) * H * 0.075);
+  });
+}
+
+function drawBigTxt() {
+  if (!bigTxt) return;
+  let age = bigTxtAge || 0;
+  const life = bigTxt === 'OUT!' ? 2800 : 1600;
+  const t = age / life;
+  if (t > 1) return;
+  const pop = Math.min(1, age / 120);
+  const sc = 0.6 + (1 - Math.pow(1 - pop, 3)) * 1.4;
+  const alpha = t > 0.75 ? 1 - (t - 0.75) / 0.25 : 1;
+  ctx.save();
+  ctx.translate(W / 2, H * 0.38);
+  ctx.scale(sc, sc);
+  ctx.globalAlpha = alpha;
+  ctx.textAlign = 'center';
+  ctx.font = '900 90px Segoe UI, Arial, sans-serif';
+  ctx.shadowColor = '#f1c40f';
+  ctx.shadowBlur = 28;
+  ctx.strokeStyle = '#7c4a0a';
+  ctx.lineWidth = 10;
+  ctx.strokeText(bigTxt, 0, 0);
+  ctx.fillStyle = '#ffd700';
+  ctx.fillText(bigTxt, 0, 0);
+  ctx.shadowBlur = 0;
+  ctx.globalAlpha = alpha;
+  ctx.font = '700 26px Segoe UI, Arial, sans-serif';
+  ctx.fillStyle = '#fff';
+  if (bigTxtSub) ctx.fillText(bigTxtSub, 0, 46);
+  ctx.restore();
+}
+
+function drawBat() {
+  const bx = bat.x, by = H - bat.h;
+  const bladeH = bat.h * 3;
+  const bx2 = bx + bat.w * 0.06;
+  const bw2 = bat.w * 0.88;
+
+  ctx.fillStyle = '#5a2c0a';
+  rr(bx + bat.w / 2 - 4, by - 6, 8, bat.h * 1.4, 3);
+  ctx.fill();
+  ctx.fillStyle = '#8a4a18';
+  rr(bx + bat.w / 2 - 2.5, by - 5, 5, bat.h * 1.3, 2.5);
+  ctx.fill();
+
+  const g = ctx.createLinearGradient(bx2, 0, bx2 + bw2, 0);
+  g.addColorStop(0, '#d9a15f');
+  g.addColorStop(0.5, '#c07a33');
+  g.addColorStop(1, '#93501a');
+  ctx.fillStyle = g;
+  rr(bx2, by - bladeH, bw2, bladeH, 10);
+  ctx.fill();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = '#6b3d12';
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(90,45,12,0.5)';
+  ctx.lineWidth = 1.4;
+  for (let i = 0; i < 5; i++) {
+    const lx = bx2 + 12 + i * (bw2 - 24) / 5;
+    ctx.beginPath();
+    ctx.moveTo(lx, by - bladeH + 8);
+    ctx.bezierCurveTo(lx + 6, by - bladeH + bladeH / 2, lx - 6, by - bladeH + bladeH / 2, lx, by - bladeH + bladeH - 8);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = 'rgba(255,215,0,0.9)';
+  const sw = Math.min(30, bat.w * 0.2);
+  rr(bx + bat.w / 2 - sw / 2, by - bladeH - bat.h * 0.6, sw, 5, 2);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(0,0,0,.35)';
+  ctx.beginPath();
+  ctx.ellipse(bx + bat.w / 2, H - 2, bat.w * 0.6, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawBall() {
+  for (let i = trail.length - 1; i >= 0; i--) {
+    const tr = trail[i];
+    const a = (trail.length - i) / trail.length;
+    ctx.globalAlpha = a * 0.25;
+    ctx.fillStyle = '#ff6b6b';
+    ctx.beginPath();
+    ctx.arc(tr.x, tr.y, ball.r * (0.4 + a * 0.6), 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = 'rgba(0,0,0,.3)';
+  ctx.beginPath();
+  ctx.ellipse(ball.x, H - 2, ball.r * 0.9, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.save();
+  ctx.translate(ball.x, ball.y);
+  ctx.rotate(ball.spin * 0.1);
+  const gr = ctx.createRadialGradient(-ball.r * 0.4, -ball.r * 0.4, 2, 0, 0, ball.r);
+  gr.addColorStop(0, '#ff9a8a');
+  gr.addColorStop(0.5, '#e5483f');
+  gr.addColorStop(1, '#8f1020');
+  ctx.fillStyle = gr;
+  ctx.beginPath();
+  ctx.arc(0, 0, ball.r, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  ctx.arc(0, 0, ball.r - 3, -0.9, 1.1);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, ball.r - 3, 2.2, 4.2);
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,.85)';
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.arc(0, 0, ball.r - 3, 0.6, 0.9);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, ball.r - 3, 3.7, 4.0);
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255,255,255,.85)';
+  ctx.beginPath();
+  ctx.arc(-ball.r * 0.35, -ball.r * 0.35, ball.r * 0.22, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    const a = clamp(p.life / p.max, 0, 1);
+    ctx.globalAlpha = a;
+    ctx.fillStyle = p.color;
+    if (p.shape === 1) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.life * 0.02);
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * (0.4 + a * 0.6), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawFloaties() {
+  ctx.textAlign = 'center';
+  for (const f of floaties) {
+    const a = clamp(f.life / f.max, 0, 1);
+    ctx.globalAlpha = a;
+    ctx.font = '900 ' + Math.round(H * 0.05) + 'px Segoe UI, Arial, sans-serif';
+    ctx.strokeStyle = 'rgba(0,0,0,.6)';
+    ctx.lineWidth = 4;
+    ctx.strokeText(f.text, f.x, f.y);
+    ctx.fillStyle = f.color;
+    ctx.fillText(f.text, f.x, f.y);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawTrail() { }
+
+const events = ['pointerdown', 'pointermove', 'pointerup', 'pointercancel'];
+function onPointer(e) {
+  if (e.type === 'pointerdown') {
+    if (!AC) {
+      try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { AC = null; }
+    }
+    if (AC && AC.state === 'suspended') AC.resume();
+    if (state === 'ready') { startGame(); return; }
+    dragging = true;
+    if (canvas.setPointerCapture) {
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    const p = pointToGame(e);
+    bat.x = clamp(p.x - bat.w / 2, 0, W - bat.w);
+  } else if (e.type === 'pointermove') {
+    if (!dragging) return;
+    const p = pointToGame(e);
+    bat.x = clamp(p.x - bat.w / 2, 0, W - bat.w);
+  } else {
+    dragging = false;
+  }
+}
+canvas.addEventListener('pointerdown', onPointer);
+canvas.addEventListener('pointermove', onPointer);
+canvas.addEventListener('pointerup', onPointer);
+canvas.addEventListener('pointercancel', onPointer);
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+window.addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if (e.key === 'r' || e.key === 'R' || e.key === 'Enter') startGame();
+});
+window.addEventListener('keyup', e => { keys[e.key] = false; });
+
+btnEl.addEventListener('click', () => {
+  if (!AC) {
+    try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (err) { AC = null; }
+  }
+  if (AC && AC.state === 'suspended') AC.resume();
+  startGame();
+});
+
+window.addEventListener('resize', () => {
+  fit();
+  baseSizes();
+  resetBat();
+  newBall(false);
+});
+
+let lastT = performance.now();
+function loop(now) {
+  const dt = now - lastT;
+  lastT = now;
+  if (dt > 100) return requestAnimationFrame(loop);
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+fit();
+baseSizes();
+resetBat();
+newBall(true);
+hintEl.textContent = 'Drag / swipe to move the wooden bat.';
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

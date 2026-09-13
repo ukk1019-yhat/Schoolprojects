@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Treasure Room Guard</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; }
+  body {
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:linear-gradient(#2b1c12, #1a120c 60%, #0f0b07);
+    color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden; user-select:none; -webkit-user-select:none; overscroll-behavior:none; touch-action:manipulation;
+  }
+  #credit{ font-size:clamp(12px,3.4vw,17px); font-weight:700; color:#ffd98a;
+    padding:10px 12px 2px; text-align:center; letter-spacing:.4px; text-shadow:0 2px 4px rgba(0,0,0,.5); }
+  #credit b{ color:#ffd700; }
+  h1{ font-size:clamp(18px,5.5vw,30px); color:#ffd700; letter-spacing:1px; margin:6px 10px 2px;
+    text-shadow:0 3px 6px rgba(0,0,0,.6); text-align:center; }
+  #topbar{ width:100%; max-width:820px; display:flex; justify-content:space-between; align-items:center; padding:6px 0; }
+  .pill{ background:rgba(255,255,255,.1); border-radius:999px; padding:5px 14px; font-size:clamp(12px,3.4vw,15px); font-weight:700; }
+  .pill b{ color:#ffe066; }
+  #stage{ width:min(94vw,720px); height:clamp(150px,36vh,260px); position:relative; margin:6px auto;
+    background:linear-gradient(180deg,#3a2a1a,#241a10); border-radius:18px; border:4px solid #5b4a33;
+    box-shadow:inset 0 0 60px rgba(0,0,0,.7), 0 10px 26px rgba(0,0,0,.5); overflow:hidden; }
+  #stage .floor{ position:absolute; left:0; right:0; bottom:0; height:26%; background:linear-gradient(#5d4a2e,#463620); }
+  #doorArea{ position:absolute; left:50%; top:12%; transform:translateX(-50%); width:38%; height:80%; }
+  #door{ position:absolute; left:0; right:0; top:0; bottom:0; background:linear-gradient(90deg,#6b4523,#8a5a2b,#6b4523);
+    border-radius:12px 12px 4px 4px; box-shadow:0 6px 14px rgba(0,0,0,.6); transform-origin:left center;
+    transition:transform 1s ease, opacity 1s ease; z-index:2; }
+  #door:before, #door:after{ content:''; position:absolute; top:0; bottom:0; width:18%;
+    background:rgba(0,0,0,.18); }
+  #door:before{ left:14%; } #door:after{ right:14%; }
+  #glow{ position:absolute; left:50%; top:18%; transform:translate(-50%,0); width:70%; height:70%;
+    background:radial-gradient(circle, #ffd700, rgba(255,215,0,.25) 55%, transparent 75%);
+    border-radius:50%; opacity:0; transition:opacity 1.2s ease; z-index:1; }
+  #chest{ position:absolute; left:50%; bottom:10%; transform:translateX(-50%); width:46%; z-index:3;
+    transition:transform .3s ease; }
+  #chest .box{ height:clamp(30px,8vh,52px); background:linear-gradient(#8a4a1b,#5c2e0e); border-radius:0 0 8px 8px;
+    box-shadow:0 4px 10px rgba(0,0,0,.5); border:3px solid #3a1d08; position:relative; }
+  #chest .box:before{ content:''; position:absolute; left:0; right:0; top:38%; height:10%;
+    background:#d4a017; box-shadow:0 0 8px rgba(255,215,0,.7); }
+  #chest .box .lock{ position:absolute; left:50%; top:26%; transform:translateX(-50%); font-size:clamp(12px,4vw,20px); }
+  #chest .lid{ height:clamp(14px,4.2vh,26px); background:linear-gradient(#b06a26,#75411a); margin:0 -6px;
+    border-radius:10px 10px 4px 4px; border:3px solid #3a1d08; transform-origin:bottom center; transition:transform .5s ease; }
+  #chest .coins{ position:absolute; top:0; left:50%; transform:translate(-50%,-60%);
+    font-size:clamp(18px,6vw,34px); opacity:0; transition:opacity .4s; }
+  #guard{ position:absolute; left:8%; bottom:16%; font-size:clamp(56px,16vw,110px); z-index:4;
+    filter:drop-shadow(0 6px 8px rgba(0,0,0,.6)); transition:transform 1s ease; }
+  #guard .hint{ position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:clamp(12px,4vw,18px); white-space:nowrap; }
+  #bubble{ position:absolute; left:2%; top:38%; width:52%; z-index:5; background:#fff; color:#2b1a0a;
+    border-radius:16px; padding:10px 14px; font-size:clamp(13px,4.2vw,19px); font-weight:800; line-height:1.35;
+    box-shadow:0 4px 12px rgba(0,0,0,.45); }
+  #bubble:before{ content:''; position:absolute; left:14%; bottom:-12px; border:12px solid transparent;
+    border-top-color:#fff; border-bottom:none; }
+  #bubble.pop{ animation:popb .35s ease; }
+  @keyframes popb{ 0%{ transform:scale(.6); opacity:0 } 60%{ transform:scale(1.08) } 100%{ transform:scale(1) } }
+  .stage.wobble{ animation:wob .35s ease; }
+  @keyframes wob{ 0%,100%{ transform:translateY(0) } 30%{ transform:translateY(-6px) rotate(-1deg) }
+    60%{ transform:translateY(-10px) rotate(1deg) } }
+  .open #guard{ transform:translate(-46%, 14%) rotate(-8deg); }
+  .open #door{ transform:rotateY(70deg); opacity:.95; }
+  .open #glow{ opacity:1; }
+  .open #chest .lid{ transform:rotateX(-35deg) translateY(-30%); }
+  .open #chest .coins{ opacity:1; }
+  #panel{ width:min(94vw,720px); background:rgba(255,255,255,.06); border:2px solid rgba(255,215,0,.35);
+    border-radius:16px; padding:12px 14px; margin:10px auto; }
+  #q{ display:none; }
+  #fb{ min-height:24px; text-align:center; font-weight:800; font-size:clamp(13px,4vw,17px); margin-bottom:8px; }
+  #answers{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .ans{ padding:14px 8px; font-size:clamp(18px,6vw,26px); font-weight:900; border:none; border-radius:14px;
+    background:linear-gradient(#f7bb4d,#e67e22); color:#3a2500; cursor:pointer; box-shadow:0 5px 12px rgba(0,0,0,.4);
+    transition:transform .1s, filter .2s; }
+  .ans:hover{ filter:brightness(1.08); }
+  .ans:active{ transform:scale(.95); }
+  .ans.good{ background:linear-gradient(#7ee081,#28a745); color:#063; }
+  .ans.bad{ background:linear-gradient(#f27a7a,#c0392b); color:#500; animation:badshake .35s; }
+  @keyframes badshake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-7px)} 75%{transform:translateX(7px)} }
+  #rules{ max-width:820px; padding:4px 14px 14px; text-align:center; font-size:clamp(11px,3vw,13px);
+    color:#bca78a; line-height:1.6; }
+  #rules b{ color:#ffe066; }
+  #winOverlay{ position:fixed; inset:0; background:rgba(20,12,4,.86); display:none; align-items:center;
+    justify-content:center; flex-direction:column; z-index:50; padding:20px; text-align:center; }
+  #winOverlay.show{ display:flex; }
+  #winOverlay h2{ font-size:clamp(24px,8vw,44px); color:#ffd700; text-shadow:0 4px 10px rgba(0,0,0,.7); margin-bottom:6px; }
+  #winOverlay p{ font-size:clamp(15px,4.5vw,22px); margin:6px 0; }
+  #winOverlay button{ margin-top:16px; padding:14px 34px; font-size:clamp(16px,5vw,20px); font-weight:800;
+    border:none; border-radius:999px; background:linear-gradient(#f7bb4d,#e67e22); color:#3a2500; cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,0,0,.5); }
+  .coin-fly{ position:absolute; font-size:24px; z-index:60; pointer-events:none; }
+  .coin-burst{ position:fixed; font-size:clamp(22px,6vw,38px); z-index:70; pointer-events:none; }
+</style>
+</head>
+<body>
+  <div id="credit">Prompted &amp; designed by <b>Ruhi Parinica Thayi</b> &bull; Grade 4 &bull; School: New Era</div>
+  <h1>&#128481; TREASURE ROOM GUARD &#129521;</h1>
+  <div id="topbar">
+    <div class="pill">&#128273; Question <b id="prog">1/8</b></div>
+    <div class="pill">&#129689; <b id="coins">0</b> coins</div>
+    <div class="pill">Best <b id="best">0</b></div>
+  </div>
+
+  <div id="stage" class="stage">
+    <div class="floor"></div>
+    <div id="doorArea">
+      <div id="glow"></div>
+      <div id="door"></div>
+      <div id="chest">
+        <div class="coins">&#128176;&#129521;</div>
+        <div class="lid"></div>
+        <div class="box"><div class="lock">&#128274;</div></div>
+      </div>
+    </div>
+    <div id="guard">&#128100;<span class="hint" id="guardMood">&#10024;</span></div>
+    <div id="bubble" class="shaking"></div>
+  </div>
+
+  <div id="panel">
+    <div id="fb">Answer the guard to unlock the treasure!</div>
+    <div id="answers"></div>
+  </div>
+
+  <div id="rules"><b>How to play:</b> The guard blocks the treasure room. Answer his math questions correctly to open the magic door. Each correct answer earns <b>10 gold coins</b>. Answer all <b>8 questions</b> to unlock the treasure and win!</div>
+
+  <div id="winOverlay">
+    <h2>&#128176; TREASURE UNLOCKED! &#128176;</h2>
+    <p id="winMsg"></p>
+    <p>You earned <b id="winCoins">0</b> gold coins!</p>
+    <p>High score: <b id="winBest">0</b></p>
+    <button id="again">Play Again &#128260;</button>
+  </div>
+
+<script>
+const progEl = document.getElementById('prog');
+const coinsEl = document.getElementById('coins');
+const bestEl = document.getElementById('best');
+const bubbleEl = document.getElementById('bubble');
+const guardMood = document.getElementById('guardMood');
+const answersEl = document.getElementById('answers');
+const fbEl = document.getElementById('fb');
+const stageEl = document.querySelector('.stage');
+const winOverlay = document.getElementById('winOverlay');
+const winMsg = document.getElementById('winMsg');
+const winCoins = document.getElementById('winCoins');
+const winBest = document.getElementById('winBest');
+const againBtn = document.getElementById('again');
+
+const TOTAL = 8;
+let correct = 0, coins = 0, high = 0, qIndex = 0, locked = false, answered = false;
+let curQ = null;
+let AC = null;
+
+high = +(localStorage.getItem('treasure_hs') || 0);
+bestEl.textContent = high;
+
+function ri(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+function makeQ() {
+  const r = Math.random();
+  let text, ans;
+  if (r < 0.3) {
+    const a = ri(2, 20), b = ri(2, 20);
+    text = 'What is ' + a + ' + ' + b + '?'; ans = a + b;
+  } else if (r < 0.55) {
+    const b = ri(1, 19), a = b + ri(0, 20);
+    text = 'What is ' + a + ' \u2212 ' + b + '?'; ans = a - b;
+  } else if (r < 0.8) {
+    const a = ri(2, 12), b = ri(2, 12);
+    text = 'What is ' + a + ' \u00D7 ' + b + '?'; ans = a * b;
+  } else {
+    const b = ri(2, 9), q = ri(2, 12);
+    text = 'What is ' + (b * q) + ' \u00F7 ' + b + '?'; ans = q;
+  }
+  return { text: text, ans: ans };
+}
+
+function options(correctAns) {
+  const set = new Set([correctAns]);
+  let g = 0;
+  while (set.size < 4 && g++ < 300) {
+    let o = correctAns + (Math.random() < 0.5 ? -1 : 1) * ri(1, 3);
+    if (o < 0) o = correctAns + ri(1, 3);
+    set.add(o);
+  }
+  while (set.size < 4) set.add(correctAns + set.size + 1);
+  return shuffle([...set]);
+}
+
+function nextQ() {
+  answered = false;
+  curQ = makeQ();
+  bubbleEl.textContent = curQ.text;
+  bubbleEl.classList.add('pop');
+  setTimeout(() => bubbleEl.classList.remove('pop'), 350);
+  const opts = options(curQ.ans);
+  answersEl.innerHTML = '';
+  opts.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'ans';
+    b.textContent = o;
+    b.dataset.key = (i + 1);
+    b.addEventListener('click', () => pick(o, b));
+    answersEl.appendChild(b);
+  });
+}
+
+function onCorrect() {
+  answered = true;
+  correct++;
+  coins += 10;
+  coinsEl.textContent = coins;
+  qIndex++;
+  progEl.textContent = qIndex + '/' + TOTAL;
+  guardMood.textContent = '\uD83D\uDE00';
+  fbEl.textContent = 'Correct! +10 coins! \u2B50';
+  beep(660, 0.15, 'sine', 0.2);
+  flyCoin();
+  stageEl.classList.add('wobble');
+  setTimeout(() => stageEl.classList.remove('wobble'), 350);
+  if (qIndex >= TOTAL) {
+    setTimeout(unlock, 900);
+  } else {
+    setTimeout(nextQ, 900);
+  }
+}
+
+function onWrong() {
+  fbEl.textContent = 'Oops! That is wrong \u274C Try again!';
+  guardMood.textContent = '\uD83D\uDE21';
+  beep(180, 0.2, 'square', 0.16);
+}
+
+function pick(val, btn) {
+  if (answered) return;
+  if (val === curQ.ans) {
+    btn.classList.add('good');
+    onCorrect();
+  } else {
+    btn.classList.add('bad');
+    onWrong();
+  }
+}
+
+function unlock() {
+  stageEl.classList.add('open');
+  guardMood.textContent = '\uD83C\uDF89';
+  fbEl.textContent = 'The door is open! \uD83D\uDD13';
+  fanfare();
+  burstCoins();
+  if (coins > high) {
+    high = coins;
+    localStorage.setItem('treasure_hs', high);
+    bestEl.textContent = high;
+  }
+  setTimeout(() => {
+    winCoins.textContent = coins;
+    winBest.textContent = high;
+    winMsg.textContent = high === coins && coins > 0 ? 'NEW HIGH SCORE! \uD83C\uDF1F' : 'Great job, treasure hunter!';
+    winOverlay.classList.add('show');
+  }, 1200);
+}
+
+function flyCoin() {
+  const chestRect = document.querySelector('#chest').getBoundingClientRect();
+  const coinsRect = document.getElementById('coins').getBoundingClientRect();
+  const c = document.createElement('div');
+  c.className = 'coin-fly';
+  c.textContent = '\uD83E\uDE99';
+  c.style.left = (chestRect.left + chestRect.width / 2 - 12) + 'px';
+  c.style.top = (chestRect.top + 10) + 'px';
+  document.body.appendChild(c);
+  const dx = coinsRect.left + coinsRect.width / 2 - c.offsetLeft;
+  const dy = coinsRect.top + 12 - c.offsetTop;
+  c.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 },
+             { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(.6)', opacity: .6 }],
+            { duration: 650, easing: 'ease-in' }).onfinish = () => c.remove();
+}
+
+function burstCoins() {
+  for (let i = 0; i < 26; i++) {
+    const c = document.createElement('div');
+    c.className = 'coin-burst';
+    c.textContent = Math.random() < 0.5 ? '\uD83E\uDE99' : (Math.random() < 0.5 ? '\uD83D\uDCB0' : '\u2B50');
+    c.style.left = (window.innerWidth / 2 - 20 + ri(-160, 160)) + 'px';
+    c.style.top = (window.innerHeight / 2 + ri(-120, 60)) + 'px';
+    document.body.appendChild(c);
+    const dx = ri(-180, 180), dy = ri(-240, 120);
+    c.animate([{ transform: 'translate(0,0) scale(.4) rotate(0deg)', opacity: 1 },
+               { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(1.3) rotate(' + ri(-200, 200) + 'deg)', opacity: 0 }],
+              { duration: ri(800, 1500), easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = () => c.remove();
+  }
+}
+
+function resetGame() {
+  correct = 0; coins = 0; qIndex = 0;
+  coinsEl.textContent = 0;
+  bestEl.textContent = high;
+  progEl.textContent = '1/' + TOTAL;
+  stageEl.classList.remove('open');
+  guardMood.textContent = '\uD83D\uDECB';
+  winOverlay.classList.remove('show');
+  qIndex = 0;
+  fbEl.textContent = 'Answer the guard to unlock the treasure!';
+  nextQ();
+}
+
+function beep(freq, dur, type, vol) {
+  if (!AC) return;
+  const o = AC.createOscillator();
+  const gN = AC.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  gN.gain.setValueAtTime(vol, AC.currentTime);
+  gN.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + dur);
+  o.connect(gN).connect(AC.destination);
+  o.start();
+  o.stop(AC.currentTime + dur + 0.02);
+}
+function fanfare() {
+  if (!AC) return;
+  [523, 659, 784, 1047, 1319].forEach((f, i) => setTimeout(() => beep(f, 0.16, 'triangle', 0.22), i * 130));
+}
+
+function ensureAudio() {
+  if (!AC) {
+    try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; }
+  }
+  if (AC && AC.state === 'suspended') AC.resume();
+}
+
+[answersEl, stageEl, document.getElementById('panel')].forEach(el => {
+  el.addEventListener('pointerdown', ensureAudio);
+});
+document.addEventListener('keydown', (e) => {
+  ensureAudio();
+  if (e.key >= '1' && e.key <= '4') {
+    const btns = answersEl.querySelectorAll('.ans');
+    const b = btns[Number(e.key) - 1];
+    if (b) b.click();
+  }
+  if (e.key === 'Enter') { againBtn.click(); }
+});
+againBtn.addEventListener('click', () => { ensureAudio(); resetGame(); });
+
+resetGame();
+</script>
+</body>
+</html>
