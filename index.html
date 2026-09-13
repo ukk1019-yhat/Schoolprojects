@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>New Era Games Store</title>
+<title>Edu Alt Tech | New Era Games Store</title>
 <style>
   :root{
     --ink:#eaf3fb; --muted:#a9c2d6; --dim:#7c97ad;
@@ -21,6 +21,18 @@
     overflow-x:hidden; -webkit-user-select:none; user-select:none;
   }
   header{ text-align:center; margin:0 auto 30px; animation:fade .6s ease both; }
+  .brand{
+    display:inline-flex; align-items:center; gap:12px; margin-bottom:16px;
+    background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:999px;
+    padding:10px 22px 10px 12px; box-shadow:0 0 28px rgba(255,215,0,.12) inset;
+  }
+  .brand img{ width:48px; height:48px; border-radius:12px; object-fit:cover; box-shadow:0 4px 12px rgba(0,0,0,.4); }
+  .brand .nm{
+    font-size:clamp(20px,5.5vw,30px); font-weight:900; letter-spacing:.5px;
+    background:linear-gradient(180deg,#fff3c4,var(--gold2));
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));
+  }
   .sch{
     display:inline-flex; align-items:center; gap:8px; font-weight:800; letter-spacing:1.5px;
     font-size:clamp(11px,3vw,14px); color:var(--gold1); background:rgba(255,215,0,.1);
@@ -109,12 +121,15 @@
   }
   footer{ text-align:center; margin-top:38px; color:var(--dim); font-size:clamp(11px,3vw,13px); animation:fade .7s ease .4s both; }
   footer b{ color:var(--gold2); }
+  footer .br{ display:inline-flex; align-items:center; gap:8px; justify-content:center; }
+  footer .br img{ width:26px; height:26px; border-radius:7px; object-fit:cover; }
   @media (min-width:700px){ .grid{ grid-template-columns:repeat(2,1fr);} .card:last-child:nth-child(odd){ grid-column:1 / -1; max-width:460px; margin:0 auto; width:100%; } }
   @media (min-width:980px){ .grid{ grid-template-columns:repeat(3,1fr);} }
 </style>
 </head>
 <body>
   <header>
+    <div class="brand"><img src="logo.png" alt="Edu Alt Tech logo"><span class="nm">Edu Alt Tech</span></div>
     <div class="sch">&#127979;&nbsp; SCHOOL: NEW ERA</div>
     <h1>&#127918; Games Store</h1>
     <p class="tag">Every game here was <b style="color:var(--gold1)">designed by young creators</b> of New Era. Pick a game and start playing!</p>
@@ -189,6 +204,6 @@
     </article>
   </main>
 
-  <footer>Made with <b>&hearts;</b> by <b>Edu Alt Tech</b> &bull; New Era &bull; 2026</footer>
+  <footer><span class="br"><img src="logo.png" alt="Edu Alt Tech logo">Made with <b>&hearts;</b> by <b>Edu Alt Tech</b> &bull; New Era &bull; 2026</span></footer>
 </body>
 </html>
