@@ -122,6 +122,14 @@
   footer b{ color:var(--gold2); }
   footer .br{ display:inline-flex; align-items:center; gap:8px; justify-content:center; }
   footer .br img{ width:26px; height:26px; border-radius:7px; object-fit:cover; }
+  footer .cta{ margin-top:14px; }
+  footer .cta a{
+    display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+    background:rgba(37,211,102,.14); border:1px solid rgba(37,211,102,.45); color:#7ee6a8;
+    padding:10px 20px; border-radius:999px; font-weight:800; font-size:clamp(12px,3.2vw,14px);
+    transition:transform .12s ease, background .12s ease;
+  }
+  footer .cta a:hover{ background:rgba(37,211,102,.24); transform:translateY(-2px); }
   @media (min-width:700px){ .grid{ grid-template-columns:repeat(2,1fr);} .card:last-child:nth-child(odd){ grid-column:1 / -1; max-width:460px; margin:0 auto; width:100%; } }
   @media (min-width:980px){ .grid{ grid-template-columns:repeat(3,1fr);} }
   .pair{ display:grid; grid-template-columns:1fr; gap:22px; grid-column:1 / -1; max-width:760px; margin:0 auto; width:100%; }
@@ -210,6 +218,7 @@
     </div>
   </main>
 
-  <footer><span class="br"><img src="logo.png" alt="Edu Alt Tech logo">Made with <b>&hearts;</b> by <b>Edu Alt Tech</b> &bull; New Era &bull; 2026</span></footer>
+  <footer><span class="br"><img src="logo.png" alt="Edu Alt Tech logo">Made with <b>&hearts;</b> by <b>Edu Alt Tech</b> &bull; New Era &bull; 2026</span>
+    <p class="cta"><a href="https://wa.me/919121505879" target="_blank" rel="noopener">&#128172; Contact Us on WhatsApp: 9121505879</a></p></footer>
 </body>
 </html>
