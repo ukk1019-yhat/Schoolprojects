@@ -257,7 +257,7 @@
   .pair .card:nth-child(2){ animation:rise .55s ease .33s both; }
   @media (min-width:560px){ .pair{ grid-template-columns:1fr 1fr; } }
   @media (max-width:480px){
-    body{ padding:16px 12px calc(36px + env(safe-area-inset-bottom)); }
+    body{ padding:16px 12px 36px; padding-bottom:calc(36px + env(safe-area-inset-bottom)); }
     .cover{ height:96px; }
     .cover .emoji{ font-size:42px; }
     .grid{ gap:16px; }
@@ -275,6 +275,18 @@
     .body{ padding:14px 12px 16px; }
     .maker .avi{ width:30px; height:30px; font-size:14px; }
     .coin10{ font-size:15px; }
+  }
+  html{ touch-action:manipulation; }
+  /* iOS Safari <16.2 has no color-mix() — safe fallbacks */
+  @supports not (background: color-mix(in srgb, red, blue)){
+    .card{ background:linear-gradient(180deg,#2a0f5e 0%, #160633 100%); border-color:var(--ac); box-shadow:0 0 0 3px var(--ac), 6px 8px 0 rgba(0,0,0,.55); }
+    .card.playable:hover{ box-shadow:0 0 0 3px var(--ac), 8px 12px 0 rgba(0,0,0,.6), 0 0 30px var(--ac); }
+    .cover{ background:repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 2px, transparent 2px 5px), linear-gradient(135deg, var(--ac) 0%, #12043a 100%); }
+    .cover .emoji{ filter:drop-shadow(0 6px 0 rgba(0,0,0,.5)) drop-shadow(0 0 14px var(--ac)); }
+    .cat{ background:var(--ac); }
+    .body h2, .card.playable .body h2::after{ text-shadow:0 0 12px var(--ac), 3px 3px 0 var(--blk); }
+    .maker .avi{ background:var(--ac); }
+    .play{ background:linear-gradient(180deg, #fff 0%, var(--ac) 100%); }
   }
 </style>
 </head>
