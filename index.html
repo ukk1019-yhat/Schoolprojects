@@ -106,6 +106,74 @@
     transition:left .4s ease;
   }
   .card.playable:hover .play::after{ left:calc(100% + 20px); }
+  /* --- arcade marquee --- */
+  .marc{ overflow:hidden; white-space:nowrap; margin-bottom:10px; padding:4px 0; }
+  .marc-in{ display:inline-flex; animation:marcmove 16s linear infinite; will-change:transform; }
+  .marc .tx{
+    font-size:clamp(30px,8vw,56px); line-height:1.02; letter-spacing:2px; font-weight:900;
+    text-transform:uppercase; color:#fff; -webkit-text-stroke:1px var(--blk); white-space:nowrap;
+    text-shadow:0 0 12px var(--neon1), 0 0 30px rgba(255,43,214,.7), 5px 5px 0 var(--blk);
+    padding:0 18px;
+  }
+  @keyframes marcmove{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+  /* --- start button press states (raised / press down / click) --- */
+  .card.playable .play{ box-shadow:0 6px 0 var(--blk), 0 10px 0 rgba(0,0,0,.3); }
+  .card.playable:hover .play{ transform:translateY(2px); box-shadow:0 3px 0 var(--blk); }
+  .card.playable .play:active{ transform:translateY(5px) scale(.99); box-shadow:0 1px 0 var(--blk); }
+  /* --- title READY? glitch swap on hover --- */
+  .body h2{ position:relative; }
+  .card.playable .body h2::after{
+    content:'READY?'; position:absolute; inset:0; display:flex; align-items:flex-start;
+    background:linear-gradient(180deg,#2a0f5e,#160633); color:#fff; letter-spacing:1px;
+    text-shadow:0 0 12px color-mix(in srgb, var(--ac) 85%, transparent), 3px 3px 0 var(--blk);
+    opacity:0; transform:translateY(-3px); pointer-events:none;
+    transition:opacity .12s ease, transform .12s ease;
+  }
+  .card.playable:hover .body h2::after{ opacity:1; transform:none; animation:glitch .5s steps(2) 1; }
+  @keyframes glitch{ 0%{ opacity:1; transform:translateX(0);} 25%{ opacity:.4; transform:translateX(2px);} 50%{ opacity:1; transform:translateX(-2px);} 75%{ opacity:.7;} 100%{ opacity:1;} }
+  /* --- treasure coin spin --- */
+  .grid .card:nth-child(2) .cover .emoji{ animation:coinspin 1.2s linear infinite; }
+  @keyframes coinspin{ from{ transform:rotateY(0);} to{ transform:rotateY(360deg);} }
+  .coin10{
+    position:fixed; z-index:15; font-weight:900; color:var(--neon3); font-size:18px; pointer-events:none;
+    text-shadow:2px 2px 0 var(--blk), 0 0 12px rgba(255,230,0,.9); animation:coinfly .9s ease-out forwards;
+  }
+  @keyframes coinfly{ 0%{ opacity:0; transform:translateY(8px) scale(.7);} 20%{ opacity:1;} 100%{ opacity:0; transform:translateY(-46px) scale(1.15);} }
+  /* --- coming soon: snowman walk + build text --- */
+  .card.soon .cover .emoji{ animation:snowy 3.2s ease-in-out infinite; }
+  @keyframes snowy{ 0%,100%{ transform:translateX(0);} 50%{ transform:translateX(42px);} }
+  .build{
+    display:block; margin-top:10px; font-size:clamp(10px,2.8vw,12px); color:var(--dim);
+    letter-spacing:1px; text-transform:uppercase; font-weight:900;
+  }
+  .build::after{ content:'_'; animation:blink 1s steps(2) infinite; }
+  /* --- background: floating pixels + scan sweep --- */
+  .pix{ position:fixed; z-index:0; pointer-events:none; animation:pixdrift linear infinite; opacity:0; }
+  @keyframes pixdrift{ 0%{ transform:translateY(0); opacity:0;} 10%{ opacity:.75;} 90%{ opacity:.6;} 100%{ transform:translateY(-112vh); opacity:0;} }
+  .scan{
+    position:fixed; left:0; right:0; height:90px; z-index:5; pointer-events:none;
+    background:linear-gradient(180deg, transparent, rgba(33,239,255,.07), transparent);
+    animation:scanmove 7s linear infinite;
+  }
+  @keyframes scanmove{ 0%{ top:-100px; } 100%{ top:112vh; } }
+  /* --- game selection flash overlay --- */
+  .press{
+    position:fixed; inset:0; z-index:60; background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.92), rgba(5,1,13,.4));
+    opacity:0; pointer-events:none; transition:opacity .28s ease;
+  }
+  .press.on{ opacity:1; }
+  /* --- arcade boot loader --- */
+  #boot{
+    position:fixed; inset:0; z-index:70; background:#0b0614;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
+    transition:opacity .35s ease;
+  }
+  #boot.off{ opacity:0; pointer-events:none; }
+  #boot .coinlbl{ font-size:clamp(16px,5vw,22px); color:var(--neon3); font-weight:900; letter-spacing:3px; animation:blink .9s steps(2) infinite; }
+  #boot .bar{ width:min(240px,70vw); height:18px; border:3px solid var(--blk); box-shadow:0 0 0 2px var(--neon2), 0 0 16px rgba(33,239,255,.5); padding:2px; }
+  #boot .fill{ height:100%; width:0; background:repeating-linear-gradient(90deg, var(--neon2) 0 8px, var(--neon4) 8px 16px); animation:loadfill 1s ease-out forwards; }
+  @keyframes loadfill{ to{ width:100%; } }
+  #boot .boottxt{ color:#fff; font-size:12px; letter-spacing:2px; }
   .card.playable:hover{
     transform:translateY(-6px);
     box-shadow:0 0 0 3px color-mix(in srgb, var(--ac) 80%, #fff), 8px 12px 0 rgba(0,0,0,.6), 0 0 30px color-mix(in srgb, var(--ac) 60%, transparent);
@@ -188,13 +256,39 @@
   .pair .card:nth-child(1){ animation:rise .55s ease .26s both; }
   .pair .card:nth-child(2){ animation:rise .55s ease .33s both; }
   @media (min-width:560px){ .pair{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px){
+    body{ padding:16px 12px calc(36px + env(safe-area-inset-bottom)); }
+    .cover{ height:96px; }
+    .cover .emoji{ font-size:42px; }
+    .grid{ gap:16px; }
+    .pair{ gap:16px; }
+    .brand img{ width:44px; height:44px; }
+    .brand .nm{ font-size:20px; }
+    .sch{ padding:7px 14px; }
+    .stat{ font-size:10px; }
+    #boot .coinlbl{ font-size:15px; }
+    #boot .boottxt{ font-size:11px; }
+    footer .br{ flex-wrap:wrap; row-gap:6px; }
+    footer .cta a{ font-size:12px; padding:10px 14px; text-align:center; }
+  }
+  @media (max-width:350px){
+    .body{ padding:14px 12px 16px; }
+    .maker .avi{ width:30px; height:30px; font-size:14px; }
+    .coin10{ font-size:15px; }
+  }
 </style>
 </head>
 <body>
+  <div id="boot">
+    <div class="coinlbl">&#128353; INSERT COIN &#128353;</div>
+    <div class="bar"><div class="fill"></div></div>
+    <div class="boottxt">NEW ERA ARCADE</div>
+  </div>
+  <div class="scan"></div>
   <header>
     <div class="brand"><img src="logo.png" alt="Edu Alt Tech logo"><span class="nm">Edu Alt Tech</span></div>
     <div class="sch">&#127979;&nbsp; SCHOOL: NEW ERA</div>
-    <h1>&#127918; Games Arcade</h1>
+    <h1 class="marc"><span class="marc-in"><span class="tx">&#127918; GAMES ARCADE &bull; PLAY! &bull;</span><span class="tx">&#127918; GAMES ARCADE &bull; PLAY! &bull;</span></span></h1>
     <p class="tag">Every game here was <b>designed by young creators</b> of New Era. Pick a game and press START!</p>
     <div class="stat">&#128293; 5 games &bull; 4 ready to play</div>
   </header>
@@ -237,6 +331,7 @@
           <div class="who"><b>Nihan</b><small>School: New Era</small></div>
         </div>
         <span class="play off">&#9203; Coming soon</span>
+        <span class="build">building... 72%</span>
       </div>
     </article>
 
@@ -271,5 +366,61 @@
 
   <footer><span class="br"><img src="logo.png" alt="Edu Alt Tech logo">Made with <b>&hearts;</b> by <b><a href="https://www.edualttech.com/" target="_blank" rel="noopener">Edu Alt Tech</a></b> &bull; New Era &bull; 2026</span>
     <p class="cta"><a href="https://wa.me/919121505879" target="_blank" rel="noopener">&#128172; Contact Us on WhatsApp: 9121505879</a></p></footer>
+
+<script>
+(function(){
+  var boot=document.getElementById('boot');
+  setTimeout(function(){ boot.classList.add('off'); }, 1100);
+  setTimeout(function(){ if(boot.parentNode){ boot.remove(); } }, 1500);
+
+  var cols=['#ffffff','#21efff','#ff2bd6','#ffe600','#59ff3c'];
+  for(var i=0;i<14;i++){
+    var d=document.createElement('i'); d.className='pix';
+    d.style.left=(Math.random()*100)+'vw'; d.style.top=(Math.random()*100)+'vh';
+    d.style.animationDuration=(6+Math.random()*7)+'s'; d.style.animationDelay=(Math.random()*8)+'s';
+    var s=1+Math.random()*2; d.style.width=s+'px'; d.style.height=s+'px';
+    d.style.background=cols[Math.floor(Math.random()*cols.length)];
+    document.body.appendChild(d);
+  }
+
+  var grid=document.querySelector('.grid');
+  var treasure=grid ? grid.children[1] : null;
+  function spawnCoin(){
+    var title=grid ? grid.children[1].querySelector('.body h2') : null;
+    var r = title ? title.getBoundingClientRect() : {left:200, top:150};
+    var c=document.createElement('span'); c.className='coin10'; c.textContent='+10 \uD83E\uDE99';
+    c.style.left=(r.left+20+Math.random()*40)+'px'; c.style.top=(r.top-10)+'px';
+    document.body.appendChild(c);
+    setTimeout(function(){ if(c.parentNode){ c.parentNode.removeChild(c); } }, 950);
+  }
+  if(treasure){
+    var coinIv=null;
+    treasure.addEventListener('mouseenter', function(){
+      if(coinIv){ return; }
+      var n=0;
+      coinIv=setInterval(function(){
+        spawnCoin(); n++;
+        if(n>=3){ clearInterval(coinIv); coinIv=null; }
+      }, 360);
+    });
+    treasure.addEventListener('mouseleave', function(){
+      if(coinIv){ clearInterval(coinIv); coinIv=null; }
+    });
+  }
+
+  var press=document.createElement('div'); press.className='press'; press.id='press';
+  document.body.appendChild(press);
+  var links=document.querySelectorAll('a.play[href$=".html"]');
+  for(var j=0;j<links.length;j++){
+    links[j].addEventListener('click', function(e){
+      var href=this.getAttribute('href');
+      if(e.ctrlKey || e.metaKey || e.button!==0){ return; }
+      e.preventDefault();
+      press.classList.add('on');
+      setTimeout(function(){ window.location.href=href; }, 300);
+    });
+  }
+})();
+</script>
 </body>
 </html>
