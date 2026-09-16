@@ -1,443 +1,1823 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Edu Alt Tech | New Era Arcade</title>
-<style>
-  :root{
-    --ink:#e8f7ff; --muted:#c3aef7; --dim:#8f7bbf;
-    --neon1:#ff2bd6; --neon2:#21efff; --neon3:#ffe600; --neon4:#59ff3c;
-    --blk:#05010d;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body{
-    font-family:'Courier New', Courier, monospace;
-    background:
-      radial-gradient(900px 480px at 12% -8%, rgba(255,43,214,.16), transparent 60%),
-      radial-gradient(800px 520px at 92% 0%, rgba(33,239,255,.13), transparent 55%),
-      linear-gradient(#16013a 0%, #23054e 45%, #0b0614 100%);
-    color:var(--ink); min-height:100vh; padding:26px 16px 48px;
-    overflow-x:hidden; -webkit-user-select:none; user-select:none;
-  }
-  body::after{
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:20;
-    background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px);
-  }
-  header{ text-align:center; margin:0 auto 30px; animation:fade .6s ease both; }
-  .brand{
-    display:flex; justify-content:flex-start; align-items:center; gap:12px;
-    width:100%; margin-bottom:18px;
-  }
-  .brand img{
-    width:52px; height:52px; border-radius:4px; object-fit:cover;
-    border:2px solid var(--neon1); box-shadow:0 0 0 2px var(--blk), 0 0 18px rgba(255,43,214,.6);
-  }
-  .brand .nm{
-    font-size:clamp(20px,5.5vw,30px); font-weight:900; letter-spacing:1.5px; text-transform:uppercase;
-    color:#fff; text-shadow:0 0 10px var(--neon2), 0 0 22px rgba(33,239,255,.65), 4px 4px 0 var(--blk);
-  }
-  .sch{
-    display:inline-block; font-weight:800; letter-spacing:2px; text-transform:uppercase;
-    font-size:clamp(11px,3vw,14px); color:var(--neon3); background:rgba(255,230,0,.08);
-    border:2px solid rgba(255,230,0,.5); padding:8px 18px; margin-bottom:14px;
-    box-shadow:0 0 0 2px var(--blk), 0 0 20px rgba(255,230,0,.25), inset 0 0 14px rgba(255,230,0,.15);
-  }
-  h1{
-    font-size:clamp(30px,8vw,56px); line-height:1.02; letter-spacing:2px; font-weight:900; text-transform:uppercase;
-    color:#fff; margin-bottom:10px; -webkit-text-stroke:1px var(--blk);
-    text-shadow:0 0 12px var(--neon1), 0 0 30px rgba(255,43,214,.7), 5px 5px 0 var(--blk), -3px -3px 0 var(--neon2);
-  }
-  .tag{ font-size:clamp(13px,3.6vw,17px); color:var(--muted); max-width:560px; margin:0 auto 10px; line-height:1.55; }
-  .tag b{ color:var(--neon4); }
-  .stat{
-    display:inline-block; font-size:clamp(11px,3vw,13px); color:#16012e; font-weight:900; letter-spacing:1px;
-    background:var(--neon3); border:2px solid var(--blk); box-shadow:0 0 0 2px var(--neon3), 0 5px 0 var(--blk);
-    padding:6px 14px; text-transform:uppercase; animation:blink 1.1s steps(2) infinite;
-  }
-  .grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:24px;
-    max-width:960px; margin:0 auto;
-  }
-  .card{
-    --ac:#3498db;
-    position:relative; overflow:hidden;
-    background:linear-gradient(180deg,#2a0f5e 0%, #160633 100%);
-    border:3px solid var(--blk); box-shadow:0 0 0 3px color-mix(in srgb, var(--ac) 80%, #fff), 6px 8px 0 rgba(0,0,0,.55);
-    display:flex; flex-direction:column; clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
-    transition:transform .15s ease, box-shadow .15s ease;
-    animation:rise .55s ease both;
-  }
-  .card:nth-child(1){ animation-delay:.05s; } .card:nth-child(2){ animation-delay:.12s; }
-  .card:nth-child(3){ animation-delay:.19s; } .card:nth-child(4){ animation-delay:.26s; }
-  .card:nth-child(5){ animation-delay:.33s; }
-  @keyframes rise{ from{ opacity:0; transform:translateY(26px);} to{ opacity:1; transform:none;} }
-  @keyframes fade{ from{ opacity:0;} to{ opacity:1;} }
-  @keyframes blink{ 0%,49%{ opacity:1;} 50%,100%{ opacity:.2;} }
-  @keyframes flick{ 0%,100%,91%,95%{ opacity:1;} 92%{ opacity:.35;} 93%{ opacity:1;} 96%{ opacity:.55;} }
-  h1{ animation:flick 4.5s linear infinite; }
-  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-7px);} }
-  .cover .emoji{ animation:bob 2.8s ease-in-out infinite; }
-  .grid .card:nth-child(2) .cover .emoji{ animation-delay:.5s; }
-  .grid .card:nth-child(3) .cover .emoji, .pair .card:nth-child(1) .cover .emoji{ animation-delay:1s; }
-  .pair .card:nth-child(2) .cover .emoji{ animation-delay:1.5s; }
-  @keyframes beamX{ 0%{ transform:translateX(-160%) skewX(-18deg);} 60%,100%{ transform:translateX(430%) skewX(-18deg);} }
-  .cover::after{
-    content:''; position:absolute; top:0; bottom:0; width:36px; z-index:1; pointer-events:none;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
-    animation:beamX 3.6s linear infinite;
-  }
-  .grid .card:nth-child(2) .cover::after{ animation-delay:.9s; }
-  .grid .card:nth-child(3) .cover::after, .pair .card:nth-child(1) .cover::after{ animation-delay:1.8s; }
-  .pair .card:nth-child(2) .cover::after{ animation-delay:2.7s; }
-  .sch{ animation:schpulse 2.4s ease-in-out infinite; }
-  @keyframes schpulse{
-    0%,100%{ box-shadow:0 0 0 2px var(--blk), 0 0 20px rgba(255,230,0,.25), inset 0 0 14px rgba(255,230,0,.15);}
-    50%{ box-shadow:0 0 0 2px var(--blk), 0 0 34px rgba(255,230,0,.6), inset 0 0 18px rgba(255,230,0,.3);}
-  }
-  .ribbon{ animation:ribblink 1.1s steps(2) infinite; }
-  @keyframes ribblink{ 0%,49%{ opacity:1;} 50%,100%{ opacity:.35;} }
-  footer .cta a{ animation:wapulse 2s ease-in-out infinite; }
-  @keyframes wapulse{ 0%,100%{ filter:brightness(1);} 50%{ filter:brightness(1.3);} }
-  .play{ position:relative; overflow:hidden; }
-  .play::after{
-    content:''; position:absolute; top:0; bottom:0; left:-90px; width:55px; z-index:1; pointer-events:none;
-    transform:skewX(-20deg); background:linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
-    transition:left .4s ease;
-  }
-  .card.playable:hover .play::after{ left:calc(100% + 20px); }
-  /* --- arcade marquee --- */
-  .marc{ overflow:hidden; white-space:nowrap; margin-bottom:10px; padding:4px 0; }
-  .marc-in{ display:inline-flex; animation:marcmove 16s linear infinite; will-change:transform; }
-  .marc .tx{
-    font-size:clamp(30px,8vw,56px); line-height:1.02; letter-spacing:2px; font-weight:900;
-    text-transform:uppercase; color:#fff; -webkit-text-stroke:1px var(--blk); white-space:nowrap;
-    text-shadow:0 0 12px var(--neon1), 0 0 30px rgba(255,43,214,.7), 5px 5px 0 var(--blk);
-    padding:0 18px;
-  }
-  @keyframes marcmove{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
-  /* --- start button press states (raised / press down / click) --- */
-  .card.playable .play{ box-shadow:0 6px 0 var(--blk), 0 10px 0 rgba(0,0,0,.3); }
-  .card.playable:hover .play{ transform:translateY(2px); box-shadow:0 3px 0 var(--blk); }
-  .card.playable .play:active{ transform:translateY(5px) scale(.99); box-shadow:0 1px 0 var(--blk); }
-  /* --- title READY? glitch swap on hover --- */
-  .body h2{ position:relative; }
-  .card.playable .body h2::after{
-    content:'READY?'; position:absolute; inset:0; display:flex; align-items:flex-start;
-    background:linear-gradient(180deg,#2a0f5e,#160633); color:#fff; letter-spacing:1px;
-    text-shadow:0 0 12px color-mix(in srgb, var(--ac) 85%, transparent), 3px 3px 0 var(--blk);
-    opacity:0; transform:translateY(-3px); pointer-events:none;
-    transition:opacity .12s ease, transform .12s ease;
-  }
-  .card.playable:hover .body h2::after{ opacity:1; transform:none; animation:glitch .5s steps(2) 1; }
-  @keyframes glitch{ 0%{ opacity:1; transform:translateX(0);} 25%{ opacity:.4; transform:translateX(2px);} 50%{ opacity:1; transform:translateX(-2px);} 75%{ opacity:.7;} 100%{ opacity:1;} }
-  /* --- treasure coin spin --- */
-  .grid .card:nth-child(2) .cover .emoji{ animation:coinspin 1.2s linear infinite; }
-  @keyframes coinspin{ from{ transform:rotateY(0);} to{ transform:rotateY(360deg);} }
-  .coin10{
-    position:fixed; z-index:15; font-weight:900; color:var(--neon3); font-size:18px; pointer-events:none;
-    text-shadow:2px 2px 0 var(--blk), 0 0 12px rgba(255,230,0,.9); animation:coinfly .9s ease-out forwards;
-  }
-  @keyframes coinfly{ 0%{ opacity:0; transform:translateY(8px) scale(.7);} 20%{ opacity:1;} 100%{ opacity:0; transform:translateY(-46px) scale(1.15);} }
-  /* --- coming soon: snowman walk + build text --- */
-  .card.soon .cover .emoji{ animation:snowy 3.2s ease-in-out infinite; }
-  @keyframes snowy{ 0%,100%{ transform:translateX(0);} 50%{ transform:translateX(42px);} }
-  .build{
-    display:block; margin-top:10px; font-size:clamp(10px,2.8vw,12px); color:var(--dim);
-    letter-spacing:1px; text-transform:uppercase; font-weight:900;
-  }
-  .build::after{ content:'_'; animation:blink 1s steps(2) infinite; }
-  /* --- background: floating pixels + scan sweep --- */
-  .pix{ position:fixed; z-index:0; pointer-events:none; animation:pixdrift linear infinite; opacity:0; }
-  @keyframes pixdrift{ 0%{ transform:translateY(0); opacity:0;} 10%{ opacity:.75;} 90%{ opacity:.6;} 100%{ transform:translateY(-112vh); opacity:0;} }
-  .scan{
-    position:fixed; left:0; right:0; height:90px; z-index:5; pointer-events:none;
-    background:linear-gradient(180deg, transparent, rgba(33,239,255,.07), transparent);
-    animation:scanmove 7s linear infinite;
-  }
-  @keyframes scanmove{ 0%{ top:-100px; } 100%{ top:112vh; } }
-  /* --- game selection flash overlay --- */
-  .press{
-    position:fixed; inset:0; z-index:60; background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.92), rgba(5,1,13,.4));
-    opacity:0; pointer-events:none; transition:opacity .28s ease;
-  }
-  .press.on{ opacity:1; }
-  /* --- arcade boot loader --- */
-  #boot{
-    position:fixed; inset:0; z-index:70; background:#0b0614;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px;
-    transition:opacity .35s ease;
-  }
-  #boot.off{ opacity:0; pointer-events:none; }
-  #boot .coinlbl{ font-size:clamp(16px,5vw,22px); color:var(--neon3); font-weight:900; letter-spacing:3px; animation:blink .9s steps(2) infinite; }
-  #boot .bar{ width:min(240px,70vw); height:18px; border:3px solid var(--blk); box-shadow:0 0 0 2px var(--neon2), 0 0 16px rgba(33,239,255,.5); padding:2px; }
-  #boot .fill{ height:100%; width:0; background:repeating-linear-gradient(90deg, var(--neon2) 0 8px, var(--neon4) 8px 16px); animation:loadfill 1s ease-out forwards; }
-  @keyframes loadfill{ to{ width:100%; } }
-  #boot .boottxt{ color:#fff; font-size:12px; letter-spacing:2px; }
-  .card.playable:hover{
-    transform:translateY(-6px);
-    box-shadow:0 0 0 3px color-mix(in srgb, var(--ac) 80%, #fff), 8px 12px 0 rgba(0,0,0,.6), 0 0 30px color-mix(in srgb, var(--ac) 60%, transparent);
-  }
-  .cover{
-    height:118px; display:flex; align-items:center; justify-content:center; position:relative;
-    background:
-      repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 2px, transparent 2px 5px),
-      linear-gradient(135deg, color-mix(in srgb, var(--ac) 95%, #000) 0%, color-mix(in srgb, var(--ac) 40%, #12043a) 100%);
-    border-bottom:3px solid var(--blk);
-  }
-  .cover .emoji{
-    font-size:54px; image-rendering:pixelated; filter:drop-shadow(0 6px 0 rgba(0,0,0,.5)) drop-shadow(0 0 14px color-mix(in srgb, var(--ac) 90%, #fff));
-  }
-  .cat{
-    position:absolute; top:10px; right:10px; font-size:clamp(10px,2.6vw,11px); font-weight:900;
-    letter-spacing:1px; text-transform:uppercase; color:#05010d;
-    background:var(--ac); border:2px solid var(--blk); box-shadow:3px 3px 0 rgba(0,0,0,.55);
-    padding:4px 9px;
-  }
-  .body{ padding:16px 16px 18px; display:flex; flex-direction:column; gap:8px; flex:1; }
-  .body h2{ font-size:clamp(18px,4.8vw,22px); color:#fff; letter-spacing:1px; text-transform:uppercase; text-shadow:0 0 12px color-mix(in srgb, var(--ac) 85%, transparent), 3px 3px 0 var(--blk); }
-  .body p{ font-size:clamp(12px,3.2vw,13.5px); color:var(--muted); line-height:1.55; flex:1; }
-  .maker{
-    display:flex; align-items:center; gap:10px; font-size:clamp(12px,3.2vw,13px);
-    background:rgba(0,0,0,.4); border:2px solid var(--blk); box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
-    padding:9px 12px; margin-top:4px;
-  }
-  .maker .avi{
-    width:36px; height:36px; flex:none; display:flex; align-items:center; justify-content:center;
-    font-size:17px; background:color-mix(in srgb, var(--ac) 75%, #fff);
-    border:2px solid var(--blk); box-shadow:3px 3px 0 rgba(0,0,0,.5);
-  }
-  .maker .who b{ color:#fff; font-size:clamp(11.5px,3.1vw,13px); display:block; line-height:1.2; letter-spacing:.3px; }
-  .maker .who small{ color:var(--dim); font-size:clamp(10.5px,2.9vw,11.5px); }
-  .play{
-    display:block; text-align:center; text-decoration:none; margin-top:8px; text-transform:uppercase;
-    padding:12px 10px; font-weight:900; letter-spacing:1.5px; font-size:clamp(14px,4vw,16px);
-    color:#05010d; background:linear-gradient(180deg, color-mix(in srgb,var(--ac) 55%,#fff), var(--ac));
-    border:3px solid var(--blk); box-shadow:0 5px 0 var(--blk), 0 9px 0 rgba(0,0,0,.3);
-    transition:transform .1s ease, box-shadow .1s ease, filter .1s ease;
-  }
-  .card.playable:hover .play{ filter:brightness(1.12); }
-  .card.playable .play:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--blk); }
-  .play .arr{ display:inline-block; transition:transform .15s ease; }
-  .card.playable:hover .play .arr{ transform:translateX(4px); }
-  .soon{ filter:saturate(.3) brightness(.8); }
-  .soon .cover{ background:repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 2px, transparent 2px 5px), linear-gradient(135deg,#39415c,#1a2033); }
-  .soon .play.off{
-    display:block; text-align:center; margin-top:8px; padding:12px 10px; text-transform:uppercase;
-    font-weight:900; letter-spacing:1px; font-size:clamp(13px,3.6vw,15px);
-    color:var(--dim); background:rgba(255,255,255,.05);
-    border:3px dashed rgba(255,255,255,.25); cursor:default; box-shadow:0 5px 0 rgba(0,0,0,.4);
-  }
-  .ribbon{
-    position:absolute; top:16px; left:-46px; transform:rotate(-45deg); width:170px; text-align:center;
-    background:linear-gradient(#ffe600,#ff9500); color:#16012e; font-weight:900; font-size:11px;
-    border:2px solid var(--blk); box-shadow:0 0 0 1px var(--neon3), 4px 4px 0 rgba(0,0,0,.5);
-    padding:6px 0; letter-spacing:1.5px;
-  }
-  footer{ text-align:center; margin-top:42px; color:var(--dim); font-size:clamp(11px,3vw,13px); animation:fade .7s ease .4s both; }
-  footer b{ color:var(--neon3); }
-  footer .br a{ color:inherit; text-decoration:none; border-bottom:1px dashed rgba(255,230,0,.5); transition:color .12s ease; }
-  footer .br a:hover{ color:#fff; border-bottom-color:#fff; }
-  footer .br{ display:inline-flex; align-items:center; gap:8px; justify-content:center; }
-  footer .br img{ width:26px; height:26px; object-fit:cover; border:1px solid var(--blk); box-shadow:0 0 0 1px rgba(255,43,214,.6); }
-  footer .cta{ margin-top:16px; }
-  footer .cta a{
-    display:inline-flex; align-items:center; gap:8px; text-decoration:none; text-transform:uppercase; letter-spacing:.5px;
-    background:rgba(89,255,60,.1); border:2px solid var(--neon4); color:#b6ff9e;
-    padding:10px 20px; font-weight:900; font-size:clamp(12px,3.2vw,14px);
-    box-shadow:0 0 0 2px var(--blk), 0 4px 0 var(--blk), 0 0 18px rgba(89,255,60,.3);
-    transition:transform .1s ease, background .1s ease;
-  }
-  footer .cta a:hover{ background:rgba(89,255,60,.2); transform:translateY(-2px); }
-  @media (min-width:700px){ .grid{ grid-template-columns:repeat(2,1fr);} .card:last-child:nth-child(odd){ grid-column:1 / -1; max-width:460px; margin:0 auto; width:100%; } }
-  @media (min-width:980px){ .grid{ grid-template-columns:repeat(3,1fr);} }
-  .pair{ display:grid; grid-template-columns:1fr; gap:24px; grid-column:1 / -1; max-width:760px; margin:0 auto; width:100%; }
-  .pair .card{ animation:none; }
-  .pair .card:nth-child(1){ animation:rise .55s ease .26s both; }
-  .pair .card:nth-child(2){ animation:rise .55s ease .33s both; }
-  @media (min-width:560px){ .pair{ grid-template-columns:1fr 1fr; } }
-  @media (max-width:480px){
-    body{ padding:16px 12px 36px; padding-bottom:calc(36px + env(safe-area-inset-bottom)); }
-    .cover{ height:96px; }
-    .cover .emoji{ font-size:42px; }
-    .grid{ gap:16px; }
-    .pair{ gap:16px; }
-    .brand img{ width:44px; height:44px; }
-    .brand .nm{ font-size:20px; }
-    .sch{ padding:7px 14px; }
-    .stat{ font-size:10px; }
-    #boot .coinlbl{ font-size:15px; }
-    #boot .boottxt{ font-size:11px; }
-    footer .br{ flex-wrap:wrap; row-gap:6px; }
-    footer .cta a{ font-size:12px; padding:10px 14px; text-align:center; }
-  }
-  @media (max-width:350px){
-    .body{ padding:14px 12px 16px; }
-    .maker .avi{ width:30px; height:30px; font-size:14px; }
-    .coin10{ font-size:15px; }
-  }
-  html{ touch-action:manipulation; }
-  /* iOS Safari <16.2 has no color-mix() — safe fallbacks */
-  @supports not (background: color-mix(in srgb, red, blue)){
-    .card{ background:linear-gradient(180deg,#2a0f5e 0%, #160633 100%); border-color:var(--ac); box-shadow:0 0 0 3px var(--ac), 6px 8px 0 rgba(0,0,0,.55); }
-    .card.playable:hover{ box-shadow:0 0 0 3px var(--ac), 8px 12px 0 rgba(0,0,0,.6), 0 0 30px var(--ac); }
-    .cover{ background:repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 2px, transparent 2px 5px), linear-gradient(135deg, var(--ac) 0%, #12043a 100%); }
-    .cover .emoji{ filter:drop-shadow(0 6px 0 rgba(0,0,0,.5)) drop-shadow(0 0 14px var(--ac)); }
-    .cat{ background:var(--ac); }
-    .body h2, .card.playable .body h2::after{ text-shadow:0 0 12px var(--ac), 3px 3px 0 var(--blk); }
-    .maker .avi{ background:var(--ac); }
-    .play{ background:linear-gradient(180deg, #fff 0%, var(--ac) 100%); }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Edu Alt Tech | Young Innovators Games & Media</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --primary-border: #bfdbfe;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --border-subtle: #e2e8f0;
+      --border-card: #eef2f6;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 14px 28px -4px rgba(15, 23, 42, 0.12), 0 6px 12px -2px rgba(15, 23, 42, 0.06);
+      --radius-card: 18px;
+      --radius-pill: 9999px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ========================================================
+       TOP NAVIGATION BAR
+       ======================================================== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      height: 68px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    .navbar-container {
+      width: 100%;
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      flex-shrink: 0;
+    }
+
+    .brand img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: #0b192c;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 16px;
+      right: 16px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .global-search {
+      position: relative;
+      width: 320px;
+    }
+
+    .global-search input {
+      width: 100%;
+      height: 40px;
+      padding: 0 16px 0 40px;
+      background: #f1f5f9;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .global-search input:focus {
+      background: #ffffff;
+      border-color: var(--primary-border);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .global-search .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .user-profile-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .user-profile-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Mobile hamburger menu toggle */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    /* ========================================================
+       MAIN WRAPPER
+       ======================================================== */
+    .main-content {
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 24px 48px;
+      flex: 1;
+    }
+
+    /* ========================================================
+       HERO BANNER
+       ======================================================== */
+    .hero-banner {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 80% 20%, #e0f2fe 0%, #f0fdf4 45%, #eff6ff 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 24px;
+      padding: 38px 42px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      align-items: center;
+      gap: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 30px -6px rgba(37, 99, 235, 0.07);
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 2;
+    }
+
+    .school-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 3.8vw, 44px);
+      font-weight: 800;
+      color: #0b192c;
+      line-height: 1.15;
+      letter-spacing: -0.7px;
+    }
+
+    .hero-title .highlight {
+      position: relative;
+      display: inline-block;
+      color: #0b192c;
+    }
+
+    .hero-title .sparkle {
+      position: absolute;
+      top: -4px;
+      right: -24px;
+      font-size: 22px;
+      animation: sparkleRotate 3s infinite ease-in-out;
+    }
+
+    @keyframes sparkleRotate {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(20deg) scale(1.15); }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(14px, 1.8vw, 15.5px);
+      color: #475569;
+      line-height: 1.6;
+      max-width: 540px;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-pill);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #1e293b;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hero-right {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .hero-illustration-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.08);
+      border: 3px solid #ffffff;
+      background: #ffffff;
+    }
+
+    .hero-illustration {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .student-made-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #ffffff;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 800;
+      color: #2563eb;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transform: rotate(2deg);
+      border: 1px solid #bfdbfe;
+    }
+
+    /* ========================================================
+       FILTERS & CONTROLS ROW
+       ======================================================== */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .filter-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+
+    .filter-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .controls-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sort-wrapper {
+      position: relative;
+    }
+
+    .sort-select {
+      height: 40px;
+      padding: 0 32px 0 16px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .sort-select:focus {
+      border-color: var(--primary-border);
+    }
+
+    .sort-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--text-muted);
+    }
+
+    .card-search-box {
+      position: relative;
+      width: 220px;
+    }
+
+    .card-search-box input {
+      width: 100%;
+      height: 40px;
+      padding: 0 14px 0 36px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .card-search-box input:focus {
+      border-color: var(--primary-border);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .card-search-box .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    /* ========================================================
+       GAMES & CONTENT GRID (4 COLUMNS)
+       ======================================================== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+      border-color: #dbeafe;
+    }
+
+    /* Card Thumbnail & Overlays */
+    .card-thumb {
+      position: relative;
+      width: 100%;
+      height: 168px;
+      overflow: hidden;
+      background: #e2e8f0;
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .game-card:hover .card-thumb img {
+      transform: scale(1.04);
+    }
+
+    /* Category Pill Tag (top-left) */
+    .tag-category {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #ffffff;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    }
+
+    .tag-cricket { background: #ef4444; }
+    .tag-maths   { background: #f59e0b; }
+    .tag-maze    { background: #8b5cf6; }
+    .tag-racing  { background: #6366f1; }
+    .tag-images  { background: #10b981; }
+    .tag-videos  { background: #0ea5e9; }
+    .tag-creators{ background: #8b5cf6; }
+
+    /* Media Count Tag (top-right) */
+    .tag-media {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 4px 10px;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .tag-media span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Card Details */
+    .card-body {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-size: 17.5px;
+      font-weight: 800;
+      color: #0b192c;
+      letter-spacing: -0.3px;
+    }
+
+    .card-description {
+      font-size: 12.8px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      min-height: 56px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Creator Profile Row */
+    .creator-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .creator-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #e2e8f0;
+      background: #f1f5f9;
+      flex-shrink: 0;
+    }
+
+    .creator-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .creator-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+    }
+
+    .creator-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .creator-chevron {
+      color: var(--text-dim);
+      font-size: 16px;
+      margin-right: 2px;
+    }
+
+    /* Card Actions (Buttons) */
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .btn-play {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 38px;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-play:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-media {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 38px;
+      padding: 0 14px;
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-media:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .btn-coming-soon {
+      width: 100%;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: not-allowed;
+    }
+
+    .btn-single-action {
+      width: 100%;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #f8fafc;
+      color: #1e293b;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-single-action:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+
+    /* ========================================================
+       FOOTER
+       ======================================================== */
+    footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-subtle);
+      padding: 36px 24px;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-brand img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    .footer-brand span {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .footer-brand b {
+      color: #0b192c;
+    }
+
+    .footer-brand a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-brand a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      background: #25d366;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: var(--radius-pill);
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(37, 211, 102, 0.38);
+    }
+
+    /* ========================================================
+       INTERACTIVE MODAL (VIEW MEDIA / GALLERY / VIDEOS)
+       ======================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background: #ffffff;
+      width: 100%;
+      max-width: 780px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.25);
+      display: flex;
+      flex-direction: column;
+      animation: modalSlide 0.25s ease;
+      max-height: 90vh;
+    }
+
+    @keyframes modalSlide {
+      from { transform: scale(0.96) translateY(12px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title-group h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0b192c;
+    }
+
+    .modal-title-group p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .modal-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 18px;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .modal-tabs {
+      display: flex;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      gap: 16px;
+      background: #fafafa;
+    }
+
+    .modal-tab {
+      padding: 12px 6px;
+      border: none;
+      background: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .modal-tab.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .modal-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background: var(--primary);
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .modal-media-stage {
+      width: 100%;
+      height: 360px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #0b192c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .modal-media-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-media-stage .video-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: #ffffff;
+    }
+
+    .modal-media-stage .play-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.25);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-media-stage .play-circle:hover {
+      transform: scale(1.08);
+    }
+
+    .modal-thumbnails-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .modal-thumbnail-item {
+      height: 70px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: all 0.2s ease;
+    }
+
+    .modal-thumbnail-item.active,
+    .modal-thumbnail-item:hover {
+      border-color: var(--primary);
+      opacity: 1;
+    }
+
+    .modal-thumbnail-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      background: #fafafa;
+    }
+
+    /* ========================================================
+       RESPONSIVE BREAKPOINTS
+       ======================================================== */
+    @media (max-width: 1200px) {
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-banner {
+        grid-template-columns: 1fr;
+        padding: 30px 24px;
+      }
+      .hero-right {
+        justify-content: center;
+      }
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-links {
+        display: none; /* Show in mobile menu drawer */
+      }
+      .global-search {
+        width: 220px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0 16px;
+      }
+      .global-search {
+        display: none;
+      }
+      .main-content {
+        padding: 16px 16px 36px;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .controls-right {
+        justify-content: space-between;
+      }
+      .card-search-box {
+        width: 100%;
+      }
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="boot">
-    <div class="coinlbl">&#128353; INSERT COIN &#128353;</div>
-    <div class="bar"><div class="fill"></div></div>
-    <div class="boottxt">NEW ERA ARCADE</div>
-  </div>
-  <div class="scan"></div>
-  <header>
-    <div class="brand"><img src="logo.png" alt="Edu Alt Tech logo"><span class="nm">Edu Alt Tech</span></div>
-    <div class="sch">&#127979;&nbsp; SCHOOL: NEW ERA</div>
-    <h1 class="marc"><span class="marc-in"><span class="tx">&#127918; GAMES ARCADE &bull; PLAY! &bull;</span><span class="tx">&#127918; GAMES ARCADE &bull; PLAY! &bull;</span></span></h1>
-    <p class="tag">Every game here was <b>designed by young creators</b> of New Era. Pick a game and press START!</p>
-    <div class="stat">&#128293; 5 games &bull; 4 ready to play</div>
+
+  <!-- ========================================================
+       HEADER NAVBAR
+       ======================================================== -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="nav-left">
+        <a href="index.html" class="brand">
+          <img src="logo.png" alt="Edu Alt Tech Logo">
+          <span class="brand-name">Edu Alt Tech</span>
+        </a>
+        <nav>
+          <ul class="nav-links">
+            <li>
+              <button class="nav-link active" onclick="switchNav('home', this)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                Home
+              </button>
+            </li>
+            <li>
+              <button class="nav-link" onclick="switchNav('games', this)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4m10-2h.01m-3-2h.01"/></svg>
+                Games
+              </button>
+            </li>
+            <li>
+              <button class="nav-link" onclick="switchNav('creators', this)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Creators
+              </button>
+            </li>
+            <li>
+              <button class="nav-link" onclick="switchNav('media', this)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                Media
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="nav-right">
+        <div class="global-search">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="globalSearchInput" placeholder="Search games, creators, or topics..." oninput="handleSearch(this.value)">
+        </div>
+
+        <button class="user-profile-btn" title="Student Profile" onclick="openCreatorModal('Edu Alt Tech', 'Student Innovation Club', 'All Games')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <main class="grid">
-    <article class="card playable" style="--ac:#0d9a4e">
-      <div class="cover"><div class="emoji">&#127922;</div><span class="cat">Cricket</span></div>
-      <div class="body">
-        <h2>Bat &amp; Ball</h2>
-        <p>Smash the buncing ball with a wooden bat and hit a SIX! Score as many runs as you can before you get out.</p>
-        <div class="maker">
-          <div class="avi">&#127970;</div>
-          <div class="who"><b>Sri Karthikeya Bhargav</b><small>Grade 4 &bull; School: New Era</small></div>
-        </div>
-        <a class="play" href="bat-and-ball.html">Play now <span class="arr">&#9654;</span></a>
-      </div>
-    </article>
+  <!-- ========================================================
+       MAIN BODY
+       ======================================================== -->
+  <main class="main-content">
 
-    <article class="card playable" style="--ac:#d4a017">
-      <div class="cover"><div class="emoji">&#128273;</div><span class="cat">Maths</span></div>
-      <div class="body">
-        <h2>Treasure Guard</h2>
-        <p>Earn gold coins by solving maths questions. Guard the chest, unlock the door and grab the treasure!</p>
-        <div class="maker">
-          <div class="avi">&#127750;</div>
-          <div class="who"><b>Ruhi Parinica Thayi</b><small>Grade 4 &bull; School: New Era</small></div>
+    <!-- HERO BANNER -->
+    <section class="hero-banner">
+      <div class="hero-left">
+        <div class="school-badge">
+          <span>🏫</span> SCHOOL: NEW ERA
         </div>
-        <a class="play" href="treasure-guard.html">Play now <span class="arr">&#9654;</span></a>
+        <h1 class="hero-title">
+          Games, Created by<br>
+          <span class="highlight">Our Young Innovators
+            <span class="sparkle">✨</span>
+          </span>
+        </h1>
+        <p class="hero-subtitle">
+          Every game here was designed by students of New Era. Play, explore and see their creativity come to life!
+        </p>
+        <div class="hero-stats">
+          <div class="stat-pill">
+            <span>🎮</span> 5 Games
+          </div>
+          <div class="stat-pill">
+            <span>👤</span> 4 Student Creators
+          </div>
+          <div class="stat-pill">
+            <span>🏆</span> Play • Learn • Support
+          </div>
+        </div>
       </div>
-    </article>
 
-    <article class="card soon" style="--ac:#5bd0e6">
-      <div class="ribbon">INSERT COIN</div>
-      <div class="cover"><div class="emoji">&#9924;</div><span class="cat">Maze</span></div>
-      <div class="body">
-        <h2>Maze Chase</h2>
-        <p>Outrun the snowman through a growing maze and escape before he catches you. This game is being built right now!</p>
-        <div class="maker">
-          <div class="avi">&#128044;</div>
-          <div class="who"><b>Nihan</b><small>School: New Era</small></div>
+      <div class="hero-right">
+        <div class="hero-illustration-wrapper">
+          <img class="hero-illustration" src="assets/hero-students.jpg" alt="Students building games">
+          <div class="student-made-badge">
+            <span>🚀</span> Student Made!
+          </div>
         </div>
-        <span class="play off">&#9203; Coming soon</span>
-        <span class="build">building... 72%</span>
       </div>
-    </article>
+    </section>
 
-    <div class="pair">
-    <article class="card playable" style="--ac:#e74c3c">
-      <div class="cover"><div class="emoji">&#127951;</div><span class="cat">Cricket</span></div>
-      <div class="body">
-        <h2>Cricket Hitter</h2>
-        <p>You are the tall batsman in the red jersey. Swing at the perfect moment and smash SIXES off 155 km/h bowling!</p>
-        <div class="maker">
-          <div class="avi">&#127891;</div>
-          <div class="who"><b>Karthikeya</b><small>Grade 5 &bull; School: New Era</small></div>
-        </div>
-        <a class="play" href="cricket-hitter.html">Play now <span class="arr">&#9654;</span></a>
+    <!-- FILTER & CONTROLS ROW -->
+    <div class="controls-bar">
+      <div class="filter-pills">
+        <button class="filter-btn active" data-cat="all" onclick="filterCategory('all', this)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/></svg>
+          All Games
+        </button>
+        <button class="filter-btn" data-cat="cricket" onclick="filterCategory('cricket', this)">
+          <span>🏏</span> Cricket
+        </button>
+        <button class="filter-btn" data-cat="maths" onclick="filterCategory('maths', this)">
+          <span>π</span> Maths
+        </button>
+        <button class="filter-btn" data-cat="maze" onclick="filterCategory('maze', this)">
+          <span>🌀</span> Maze
+        </button>
+        <button class="filter-btn" data-cat="racing" onclick="filterCategory('racing', this)">
+          <span>🚗</span> Racing
+        </button>
+        <button class="filter-btn" data-cat="other" onclick="filterCategory('other', this)">
+          <span>⭐</span> Other
+        </button>
       </div>
-    </article>
 
-    <article class="card playable" style="--ac:#9b59b6">
-      <div class="cover"><div class="emoji">&#128663;</div><span class="cat">Racing</span></div>
-      <div class="body">
-        <h2>Highway Dash</h2>
-        <p>Drive 4000&#8202;m down a busy highway through 10 levels. Dodge the traffic, cones and barriers to the finish line!</p>
-        <div class="maker">
-          <div class="avi">&#128668;</div>
-          <div class="who"><b>Joesh &amp; Rohan</b><small>School: New Era</small></div>
+      <div class="controls-right">
+        <div class="sort-wrapper">
+          <select class="sort-select" id="sortSelect" onchange="sortCards(this.value)">
+            <option value="newest">Newest First</option>
+            <option value="alpha">Alphabetical</option>
+            <option value="popular">Most Popular</option>
+          </select>
+          <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <a class="play" href="car-dash.html">Play now <span class="arr">&#9654;</span></a>
+
+        <div class="card-search-box">
+          <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="cardSearchInput" placeholder="Search games..." oninput="handleSearch(this.value)">
+        </div>
       </div>
-    </article>
+    </div>
+
+    <!-- ========================================================
+         CARDS GRID (4 COLUMNS)
+         ======================================================== -->
+    <div class="cards-grid" id="cardsGrid">
+
+      <!-- CARD 1: Bat & Ball -->
+      <article class="game-card" data-category="cricket" data-title="Bat & Ball" data-creator="Sri Karthikeya Bhargav">
+        <div class="card-thumb">
+          <img src="assets/bat-and-ball.jpg" alt="Bat & Ball cricket game">
+          <span class="tag-category tag-cricket">Cricket</span>
+          <div class="tag-media">
+            <span>▶ 1 Video</span>
+            <span>🖼 3 Images</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Bat &amp; Ball</h2>
+          <p class="card-description">Smash the bouncing ball with a wooden bat and hit a SIX! Score as many runs as you can before you get out.</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Sri Karthikeya Bhargav', 'Grade 4 • School: New Era', 'Bat & Ball')">
+            <img class="creator-avatar" src="assets/avatar-sri.jpg" alt="Sri Karthikeya Bhargav">
+            <div class="creator-info">
+              <div class="creator-name">Sri Karthikeya Bhargav</div>
+              <div class="creator-meta">Grade 4 • School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="bat-and-ball.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Bat & Ball', 'assets/bat-and-ball.jpg', 'Cricket game mechanics & boundary hitting')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 2: Treasure Guard -->
+      <article class="game-card" data-category="maths" data-title="Treasure Guard" data-creator="Ruhi Parinica Thayi">
+        <div class="card-thumb">
+          <img src="assets/treasure-guard.jpg" alt="Treasure Guard maths adventure game">
+          <span class="tag-category tag-maths">Maths</span>
+          <div class="tag-media">
+            <span>▶ 1 Video</span>
+            <span>🖼 4 Images</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Treasure Guard</h2>
+          <p class="card-description">Earn gold coins by solving maths questions. Guard the chest, unlock the door and grab the treasure!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Ruhi Parinica Thayi', 'Grade 4 • School: New Era', 'Treasure Guard')">
+            <img class="creator-avatar" src="assets/avatar-ruhi.jpg" alt="Ruhi Parinica Thayi">
+            <div class="creator-info">
+              <div class="creator-name">Ruhi Parinica Thayi</div>
+              <div class="creator-meta">Grade 4 • School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="treasure-guard.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Treasure Guard', 'assets/treasure-guard.jpg', 'Maths puzzle maze & coin rewards')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 3: Maze Chase -->
+      <article class="game-card" data-category="maze" data-title="Maze Chase" data-creator="Nihan">
+        <div class="card-thumb">
+          <img src="assets/maze-chase.jpg" alt="Maze Chase winter snowman game">
+          <span class="tag-category tag-maze">Maze</span>
+          <div class="tag-media">
+            <span>▶ 1 Video</span>
+            <span>🖼 2 Images</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Maze Chase</h2>
+          <p class="card-description">Outrun the snowman through a growing maze and escape before he catches you. This game is being built right now!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Nihan', 'School: New Era', 'Maze Chase')">
+            <img class="creator-avatar" src="assets/avatar-nihan.jpg" alt="Nihan">
+            <div class="creator-info">
+              <div class="creator-name">Nihan</div>
+              <div class="creator-meta">School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-coming-soon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Coming Soon
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 4: Cricket Hitter -->
+      <article class="game-card" data-category="cricket" data-title="Cricket Hitter" data-creator="Srinivas Thalada">
+        <div class="card-thumb">
+          <img src="assets/cricket-hitter.jpg" alt="Cricket Hitter fast bowling game">
+          <span class="tag-category tag-cricket">Cricket</span>
+          <div class="tag-media">
+            <span>▶ 1 Video</span>
+            <span>🖼 3 Images</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Cricket Hitter</h2>
+          <p class="card-description">You are the tall batsman in the red jersey. Swing at the perfect moment and smash SIXES off 155 km/h bowling!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Srinivas Thalada', 'Grade 4 • School: New Era', 'Cricket Hitter')">
+            <img class="creator-avatar" src="assets/avatar-srinivas.jpg" alt="Srinivas Thalada">
+            <div class="creator-info">
+              <div class="creator-name">Srinivas Thalada</div>
+              <div class="creator-meta">Grade 4 • School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="cricket-hitter.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Cricket Hitter', 'assets/cricket-hitter.jpg', 'Power-hitting timing and stadium action')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 5: Highway Dash -->
+      <article class="game-card" data-category="racing" data-title="Highway Dash" data-creator="Varun">
+        <div class="card-thumb">
+          <img src="assets/highway-dash.jpg" alt="Highway Dash fast racing game">
+          <span class="tag-category tag-racing">Racing</span>
+          <div class="tag-media">
+            <span>▶ 1 Video</span>
+            <span>🖼 4 Images</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Highway Dash</h2>
+          <p class="card-description">Drive 4000m down a busy highway through 10 levels. Dodge the traffic, cones and barriers to the finish line!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Varun', 'Grade 5 • School: New Era', 'Highway Dash')">
+            <img class="creator-avatar" src="assets/avatar-varun.jpg" alt="Varun">
+            <div class="creator-info">
+              <div class="creator-name">Varun</div>
+              <div class="creator-meta">Grade 5 • School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="car-dash.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Highway Dash', 'assets/highway-dash.jpg', 'High-speed dodge racing with obstacle levels')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 6: Student Gallery -->
+      <article class="game-card" data-category="other" data-title="Student Gallery" data-creator="Team Edu Alt Tech">
+        <div class="card-thumb">
+          <img src="assets/student-gallery.jpg" alt="Student Gallery 4-image showcase">
+          <span class="tag-category tag-images">Images</span>
+          <div class="tag-media">
+            <span>🖼 12 Images</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Student Gallery</h2>
+          <p class="card-description">Explore amazing pictures created by our students. Nature, art, projects and more!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Team Edu Alt Tech', 'Student Creators', 'Student Gallery')">
+            <img class="creator-avatar" src="logo.png" alt="Edu Alt Tech">
+            <div class="creator-info">
+              <div class="creator-name">Team Edu Alt Tech</div>
+              <div class="creator-meta">Student Creators</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-single-action" onclick="openMediaModal('Student Gallery', 'assets/student-gallery.jpg', 'Showcase of photography, digital art & class projects')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Gallery
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 7: Student Videos -->
+      <article class="game-card" data-category="other" data-title="Student Videos" data-creator="Team Edu Alt Tech">
+        <div class="card-thumb">
+          <img src="assets/student-videos.jpg" alt="Student Videos presenter whiteboard">
+          <span class="tag-category tag-videos">Videos</span>
+          <div class="tag-media">
+            <span>▶ 8 Videos</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Student Videos</h2>
+          <p class="card-description">Watch short videos made by our creators. From game demos to project explainers!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Team Edu Alt Tech', 'Student Creators', 'Student Videos')">
+            <img class="creator-avatar" src="logo.png" alt="Edu Alt Tech">
+            <div class="creator-info">
+              <div class="creator-name">Team Edu Alt Tech</div>
+              <div class="creator-meta">Student Creators</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-single-action" onclick="openMediaModal('Student Videos', 'assets/student-videos.jpg', 'Watch game walkthroughs, coding demos & tutorials')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Watch Videos
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 8: More from Our Creators -->
+      <article class="game-card" data-category="other" data-title="More from Our Creators" data-creator="Team Edu Alt Tech">
+        <div class="card-thumb">
+          <img src="assets/creators-banner.jpg" alt="Small Ideas Big Dreams Creators Banner">
+          <span class="tag-category tag-creators">Creators</span>
+          <div class="tag-media">
+            <span>🎮 5 Games</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">More from Our Creators</h2>
+          <p class="card-description">Discover more games, projects and creative ideas from our talented students.</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Team Edu Alt Tech', 'Student Creators', 'Innovation Club')">
+            <img class="creator-avatar" src="logo.png" alt="Edu Alt Tech">
+            <div class="creator-info">
+              <div class="creator-name">Team Edu Alt Tech</div>
+              <div class="creator-meta">Student Creators</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-single-action" onclick="filterCategory('all', document.querySelector('.filter-btn[data-cat=all]'))">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              Explore
+            </button>
+          </div>
+        </div>
+      </article>
+
     </div>
   </main>
 
-  <footer><span class="br"><img src="logo.png" alt="Edu Alt Tech logo">Made with <b>&hearts;</b> by <b><a href="https://www.edualttech.com/" target="_blank" rel="noopener">Edu Alt Tech</a></b> &bull; New Era &bull; 2026</span>
-    <p class="cta"><a href="https://wa.me/919121505879" target="_blank" rel="noopener">&#128172; Contact Us on WhatsApp: 9121505879</a></p></footer>
+  <!-- ========================================================
+       FOOTER
+       ======================================================== -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="logo.png" alt="Edu Alt Tech logo">
+        <span>Made with ❤️ by <b><a href="https://www.edualttech.com/" target="_blank" rel="noopener">Edu Alt Tech</a></b> • New Era • 2026</span>
+      </div>
+      <div>
+        <a href="https://wa.me/919121505879" target="_blank" rel="noopener" class="btn-whatsapp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.666-.699c.969.58 1.939.948 2.794.948h.005c3.18 0 5.767-2.586 5.768-5.766 0-3.18-2.587-5.766-5.773-5.766zm3.385 8.167c-.145.407-.847.777-1.18.825-.333.048-.769.071-2.457-.624-1.748-.718-2.883-2.496-2.97-2.612-.087-.116-.708-.942-.708-1.796 0-.854.448-1.275.607-1.449.159-.174.348-.218.464-.218.116 0 .232.002.333.007.106.005.247-.04.386.294.145.348.493 1.203.536 1.29.043.087.072.189.014.305-.058.116-.087.189-.174.29-.087.101-.184.227-.263.305-.089.087-.182.182-.078.36.104.178.463.763.993 1.235.684.61 1.261.799 1.439.887.178.087.282.073.386-.046.104-.119.448-.522.568-.701.12-.178.24-.149.404-.087.164.062 1.042.491 1.22.58.178.087.297.13.34.203.043.072.043.42-.102.827z"/></svg>
+          Contact Us on WhatsApp: 9121505879
+        </a>
+      </div>
+    </div>
+  </footer>
 
-<script>
-(function(){
-  var boot=document.getElementById('boot');
-  setTimeout(function(){ boot.classList.add('off'); }, 1100);
-  setTimeout(function(){ if(boot.parentNode){ boot.remove(); } }, 1500);
+  <!-- ========================================================
+       MEDIA LIGHTBOX MODAL
+       ======================================================== -->
+  <div class="modal-backdrop" id="mediaModal" onclick="closeMediaModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3 id="modalTitle">Game Preview</h3>
+          <p id="modalSubtitle">Media Showcase</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeMediaModal()" title="Close">&times;</button>
+      </div>
 
-  var cols=['#ffffff','#21efff','#ff2bd6','#ffe600','#59ff3c'];
-  for(var i=0;i<14;i++){
-    var d=document.createElement('i'); d.className='pix';
-    d.style.left=(Math.random()*100)+'vw'; d.style.top=(Math.random()*100)+'vh';
-    d.style.animationDuration=(6+Math.random()*7)+'s'; d.style.animationDelay=(Math.random()*8)+'s';
-    var s=1+Math.random()*2; d.style.width=s+'px'; d.style.height=s+'px';
-    d.style.background=cols[Math.floor(Math.random()*cols.length)];
-    document.body.appendChild(d);
-  }
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="tabMediaPhotos" onclick="switchModalTab('photos')">🖼 Photos / Screenshots</button>
+        <button class="modal-tab" id="tabMediaVideo" onclick="switchModalTab('video')">▶ Video Demo</button>
+      </div>
 
-  var grid=document.querySelector('.grid');
-  var treasure=grid ? grid.children[1] : null;
-  function spawnCoin(){
-    var title=grid ? grid.children[1].querySelector('.body h2') : null;
-    var r = title ? title.getBoundingClientRect() : {left:200, top:150};
-    var c=document.createElement('span'); c.className='coin10'; c.textContent='+10 \uD83E\uDE99';
-    c.style.left=(r.left+20+Math.random()*40)+'px'; c.style.top=(r.top-10)+'px';
-    document.body.appendChild(c);
-    setTimeout(function(){ if(c.parentNode){ c.parentNode.removeChild(c); } }, 950);
-  }
-  if(treasure){
-    var coinIv=null;
-    treasure.addEventListener('mouseenter', function(){
-      if(coinIv){ return; }
-      var n=0;
-      coinIv=setInterval(function(){
-        spawnCoin(); n++;
-        if(n>=3){ clearInterval(coinIv); coinIv=null; }
-      }, 360);
+      <div class="modal-body">
+        <div class="modal-media-stage" id="modalMediaStage">
+          <img id="modalMainImage" src="assets/bat-and-ball.jpg" alt="Selected Preview">
+          <div class="video-placeholder" id="modalVideoPlaceholder" style="display:none;">
+            <div class="play-circle" onclick="simulatePlayVideo()">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <p style="font-size:14px; font-weight:600;">Student Video Explainer &amp; Demo</p>
+          </div>
+        </div>
+
+        <div class="modal-thumbnails-strip" id="modalThumbStrip">
+          <!-- Dynamically populated thumbnails -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-media" onclick="closeMediaModal()">Close</button>
+        <a href="#" id="modalPlayLink" class="btn-play" style="max-width: 160px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Play Game
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       CREATOR PROFILE MODAL
+       ======================================================== -->
+  <div class="modal-backdrop" id="creatorModal" onclick="closeCreatorModal(event)">
+    <div class="modal-content" style="max-width: 480px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3 id="creatorModalName">Student Creator</h3>
+          <p id="creatorModalSchool">School: New Era</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeCreatorModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align:center; padding: 28px 24px;">
+        <img id="creatorModalImg" src="assets/avatar-sri.jpg" style="width: 88px; height: 88px; border-radius: 50%; object-fit: cover; margin-bottom: 14px; border: 3px solid #2563eb;">
+        <h4 id="creatorModalTitle" style="font-size: 19px; font-weight: 800; color: #0b192c; margin-bottom: 4px;">Student Innovator</h4>
+        <p id="creatorModalProject" style="font-size: 13.5px; color: #64748b; margin-bottom: 18px;">Creator of Bat &amp; Ball</p>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; font-size: 13px; color: #334155; line-height: 1.6;">
+          🌟 "I built this project to make learning fun and challenging for my classmates at New Era!"
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button class="btn-play" style="max-width: 180px;" onclick="closeCreatorModal()">Explore Projects</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       CLIENT INTERACTIVITY SCRIPT
+       ======================================================== -->
+  <script>
+    // Navigation tab switching
+    function switchNav(tab, el) {
+      document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      if (tab === 'games') {
+        filterCategory('all', document.querySelector('.filter-btn[data-cat=all]'));
+        document.getElementById('cardsGrid').scrollIntoView({ behavior: 'smooth' });
+      } else if (tab === 'creators') {
+        openCreatorModal('Student Innovators', 'New Era School Club', '5 Innovative Student Games');
+      } else if (tab === 'media') {
+        openMediaModal('Student Media Gallery', 'assets/student-gallery.jpg', 'All Photos & Video Demonstrations');
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // Category Filtering
+    function filterCategory(cat, el) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      const cards = document.querySelectorAll('.game-card');
+      cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        if (cat === 'all' || cardCat === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Live search (supports card search & global header search)
+    function handleSearch(query) {
+      const q = query.trim().toLowerCase();
+      document.getElementById('cardSearchInput').value = query;
+      document.getElementById('globalSearchInput').value = query;
+
+      const cards = document.querySelectorAll('.game-card');
+      cards.forEach(card => {
+        const title = (card.getAttribute('data-title') || '').toLowerCase();
+        const creator = (card.getAttribute('data-creator') || '').toLowerCase();
+        const desc = (card.querySelector('.card-description')?.textContent || '').toLowerCase();
+        const cat = (card.getAttribute('data-category') || '').toLowerCase();
+
+        if (!q || title.includes(q) || creator.includes(q) || desc.includes(q) || cat.includes(q)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Sorting
+    function sortCards(criteria) {
+      const grid = document.getElementById('cardsGrid');
+      const cards = Array.from(grid.children);
+
+      cards.sort((a, b) => {
+        const titleA = a.getAttribute('data-title') || '';
+        const titleB = b.getAttribute('data-title') || '';
+        if (criteria === 'alpha') {
+          return titleA.localeCompare(titleB);
+        } else if (criteria === 'popular') {
+          return titleB.localeCompare(titleA);
+        }
+        return 0; // default newest
+      });
+
+      cards.forEach(card => grid.appendChild(card));
+    }
+
+    // Media Modal handling
+    const mediaCatalog = {
+      'Bat & Ball': {
+        img: 'assets/bat-and-ball.jpg',
+        gameLink: 'bat-and-ball.html',
+        gallery: ['assets/bat-and-ball.jpg', 'assets/cricket-hitter.jpg', 'assets/hero-students.jpg']
+      },
+      'Treasure Guard': {
+        img: 'assets/treasure-guard.jpg',
+        gameLink: 'treasure-guard.html',
+        gallery: ['assets/treasure-guard.jpg', 'assets/student-gallery.jpg', 'assets/hero-students.jpg']
+      },
+      'Cricket Hitter': {
+        img: 'assets/cricket-hitter.jpg',
+        gameLink: 'cricket-hitter.html',
+        gallery: ['assets/cricket-hitter.jpg', 'assets/bat-and-ball.jpg', 'assets/hero-students.jpg']
+      },
+      'Highway Dash': {
+        img: 'assets/highway-dash.jpg',
+        gameLink: 'car-dash.html',
+        gallery: ['assets/highway-dash.jpg', 'assets/student-gallery.jpg', 'assets/hero-students.jpg']
+      },
+      'Student Gallery': {
+        img: 'assets/student-gallery.jpg',
+        gameLink: '#',
+        gallery: ['assets/student-gallery.jpg', 'assets/hero-students.jpg', 'assets/creators-banner.jpg']
+      },
+      'Student Videos': {
+        img: 'assets/student-videos.jpg',
+        gameLink: '#',
+        gallery: ['assets/student-videos.jpg', 'assets/hero-students.jpg', 'assets/creators-banner.jpg']
+      }
+    };
+
+    function openMediaModal(title, imageSrc, subtitle) {
+      const modal = document.getElementById('mediaModal');
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalSubtitle').textContent = subtitle || 'Media Showcase';
+
+      const data = mediaCatalog[title] || { img: imageSrc, gameLink: '#', gallery: [imageSrc, 'assets/hero-students.jpg'] };
+      document.getElementById('modalMainImage').src = data.img;
+      document.getElementById('modalPlayLink').href = data.gameLink || '#';
+      document.getElementById('modalPlayLink').style.display = data.gameLink && data.gameLink !== '#' ? 'inline-flex' : 'none';
+
+      // Build thumbnail strip
+      const strip = document.getElementById('modalThumbStrip');
+      strip.innerHTML = '';
+      data.gallery.forEach((gSrc, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = `modal-thumbnail-item ${index === 0 ? 'active' : ''}`;
+        thumb.innerHTML = `<img src="${gSrc}" alt="Thumbnail ${index + 1}">`;
+        thumb.onclick = () => {
+          strip.querySelectorAll('.modal-thumbnail-item').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+          document.getElementById('modalMainImage').src = gSrc;
+          switchModalTab('photos');
+        };
+        strip.appendChild(thumb);
+      });
+
+      switchModalTab('photos');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMediaModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('modal-close-btn')) return;
+      document.getElementById('mediaModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function switchModalTab(tab) {
+      const photosTab = document.getElementById('tabMediaPhotos');
+      const videoTab = document.getElementById('tabMediaVideo');
+      const mainImg = document.getElementById('modalMainImage');
+      const videoPlaceholder = document.getElementById('modalVideoPlaceholder');
+
+      if (tab === 'video') {
+        photosTab.classList.remove('active');
+        videoTab.classList.add('active');
+        mainImg.style.display = 'none';
+        videoPlaceholder.style.display = 'flex';
+      } else {
+        videoTab.classList.remove('active');
+        photosTab.classList.add('active');
+        videoPlaceholder.style.display = 'none';
+        mainImg.style.display = 'block';
+      }
+    }
+
+    function simulatePlayVideo() {
+      alert('Playing student game demo recording!');
+    }
+
+    // Creator Modal handling
+    const creatorAvatars = {
+      'Sri Karthikeya Bhargav': 'assets/avatar-sri.jpg',
+      'Ruhi Parinica Thayi': 'assets/avatar-ruhi.jpg',
+      'Nihan': 'assets/avatar-nihan.jpg',
+      'Srinivas Thalada': 'assets/avatar-srinivas.jpg',
+      'Varun': 'assets/avatar-varun.jpg',
+      'Team Edu Alt Tech': 'logo.png',
+      'Student Innovators': 'assets/hero-students.jpg'
+    };
+
+    function openCreatorModal(name, school, project) {
+      const modal = document.getElementById('creatorModal');
+      document.getElementById('creatorModalName').textContent = name;
+      document.getElementById('creatorModalSchool').textContent = school;
+      document.getElementById('creatorModalTitle').textContent = name;
+      document.getElementById('creatorModalProject').textContent = `Creator of ${project}`;
+      document.getElementById('creatorModalImg').src = creatorAvatars[name] || 'logo.png';
+
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCreatorModal(e) {
+      if (e && e.target !== e.currentTarget && !e.target.classList.contains('modal-close-btn')) return;
+      document.getElementById('creatorModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Keyboard ESC listener
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.getElementById('mediaModal').classList.remove('open');
+        document.getElementById('creatorModal').classList.remove('open');
+        document.body.style.overflow = '';
+      }
     });
-    treasure.addEventListener('mouseleave', function(){
-      if(coinIv){ clearInterval(coinIv); coinIv=null; }
-    });
-  }
-
-  var press=document.createElement('div'); press.className='press'; press.id='press';
-  document.body.appendChild(press);
-  function clearPress(){ press.classList.remove('on'); }
-  window.addEventListener('pageshow', clearPress);
-  window.addEventListener('pagehide', clearPress);
-  document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible'){ clearPress(); } });
-  window.addEventListener('focus', clearPress);
-  var links=document.querySelectorAll('a.play[href$=".html"]');
-  for(var j=0;j<links.length;j++){
-    links[j].addEventListener('click', function(e){
-      var href=this.getAttribute('href');
-      if(e.ctrlKey || e.metaKey || e.button!==0){ return; }
-      e.preventDefault();
-      press.classList.add('on');
-      setTimeout(function(){ window.location.href=href; }, 300);
-    });
-  }
-})();
-</script>
+  </script>
 </body>
 </html>
