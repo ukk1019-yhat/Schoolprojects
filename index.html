@@ -422,6 +422,11 @@
 
   var press=document.createElement('div'); press.className='press'; press.id='press';
   document.body.appendChild(press);
+  function clearPress(){ press.classList.remove('on'); }
+  window.addEventListener('pageshow', clearPress);
+  window.addEventListener('pagehide', clearPress);
+  document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible'){ clearPress(); } });
+  window.addEventListener('focus', clearPress);
   var links=document.querySelectorAll('a.play[href$=".html"]');
   for(var j=0;j<links.length;j++){
     links[j].addEventListener('click', function(e){
