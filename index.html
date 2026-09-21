@@ -573,6 +573,8 @@
     .tag-videos  { background: #0ea5e9; }
     .tag-creators{ background: #8b5cf6; }
     .tag-sports  { background: #f97316; }
+.tag-snowman { background: #4f83cc; }
+.tag-ghost   { background: #7c3aed; }
 
     /* Media Count Tag (top-right) */
     .tag-media {
@@ -1355,6 +1357,66 @@
         </div>
       </article>
 
+      <article class="game-card" data-category="other" data-title="Ghost Scare" data-creator="Team Edu Alt Tech">
+        <div class="card-thumb">
+          <img src="assets/maze-chase.jpg" alt="Ghost Scare haunted house game">
+          <span class="tag-category tag-ghost">Ghost</span>
+          <div class="tag-media">
+            <span>👻 3 Houses</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Ghost Scare</h2>
+          <p class="card-description">You are the friendliest ghost in the haunted house! Sneak around, scare the humans with your abilities and earn coins before they all escape. Brave humans need bigger scares!</p>
+
+          <div class="creator-row" onclick="openCreatorModal('Team Edu Alt Tech', 'Student Creators', 'Ghost Scare')">
+            <img class="creator-avatar" src="logo.png" alt="Edu Alt Tech">
+            <div class="creator-info">
+              <div class="creator-name">Team Edu Alt Tech</div>
+              <div class="creator-meta">Student Creators</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="ghost-scare.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="game-card" data-category="other" data-title="Snowman Showdown" data-creator="Team Edu Alt Tech">
+        <div class="card-thumb">
+          <img src="assets/maze-chase.jpg" alt="Snowman Showdown two mountain houses game">
+          <span class="tag-category tag-snowman">Snowman</span>
+          <div class="tag-media">
+            <span>❄ 2 Snowmen</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Snowman Showdown</h2>
+          <p class="card-description">Two houses on a quiet mountain. A boy knocks on a door, then goes home - and two snowmen come out to brawl! Punch, smash and throw snow across 6 mountain levels to fill your WARMTH, then call MOM and let the mothers end the fight in peace.</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Team Edu Alt Tech', 'Student Creators', 'Snowman Showdown')">
+            <img class="creator-avatar" src="logo.png" alt="Edu Alt Tech">
+            <div class="creator-info">
+              <div class="creator-name">Team Edu Alt Tech</div>
+              <div class="creator-meta">Student Creators</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="snowman-showdown.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+          </div>
+        </div>
+      </article>
+
       <!-- CARD 4: Cricket Hitter -->
       <article class="game-card" data-category="cricket" data-title="Cricket Hitter" data-creator="Karthikeya">
         <div class="card-thumb">
@@ -1427,7 +1489,42 @@
         </div>
       </article>
 
-      <!-- CARD 6: Basketball -->
+      <!-- CARD 6: Car Siri -->
+      <article class="game-card" data-category="racing" data-title="Car Siri" data-creator="Pashwi Jain">
+        <div class="card-thumb">
+          <img src="assets/car-siri.svg" alt="Car Siri race against rivals game">
+          <span class="tag-category tag-racing">Racing</span>
+          <div class="tag-media">
+            <span>⏱ Time Attack</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Car Siri</h2>
+          <p class="card-description">Drive Car Siri and defeat every rival car, then reach the finish line before time runs out. Each level gives you less time to win!</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Pashwi Jain', 'Grade 3 • School: New Era', 'Car Siri')">
+            <img class="creator-avatar" src="logo.png" alt="Pashwi Jain">
+            <div class="creator-info">
+              <div class="creator-name">Pashwi Jain</div>
+              <div class="creator-meta">Grade 3 • School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="car-siri.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Car Siri', 'assets/car-siri.svg', 'Race to the finish before time runs out')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- CARD 7: Basketball -->
       <article class="game-card" data-category="other" data-title="Basketball" data-creator="Hanitha and Kaira Jain">
         <div class="card-thumb">
           <img src="assets/basketball.png" alt="Basketball hoop shot game">
@@ -1740,6 +1837,11 @@
         img: 'assets/highway-dash.jpg',
         gameLink: 'car-dash.html',
         gallery: ['assets/highway-dash.jpg', 'assets/student-gallery.jpg', 'assets/hero-students.jpg']
+      },
+      'Car Siri': {
+        img: 'assets/car-siri.svg',
+        gameLink: 'car-siri.html',
+        gallery: ['assets/car-siri.svg', 'assets/highway-dash.jpg', 'assets/hero-students.jpg']
       },
       'Student Gallery': {
         img: 'assets/student-gallery.jpg',
