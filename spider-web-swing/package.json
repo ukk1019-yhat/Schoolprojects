@@ -1,0 +1,18 @@
+{
+  "name": "spider-web-swing",
+  "version": "1.0.0",
+  "description": "Original kid-friendly web-swinging platformer. Zero runtime dependencies.",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node tests/smoke.mjs && node tests/swing.test.mjs && node tests/save.test.mjs && node tests/achievements.test.mjs && node tests/tutorial.test.mjs && node tests/ui-smoke.mjs",
+    "test:browser": "node tests/browser.test.mjs",
+    "start": "node tests/serve.mjs"
+  },
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  },
+  "private": true
+}

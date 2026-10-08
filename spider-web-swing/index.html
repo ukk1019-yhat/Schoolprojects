@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="Spider Web Swing - a kid-friendly original web-swinging adventure across the city rooftops.">
+<title>Spider: Web Swing</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #05070f;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
+    overscroll-behavior: none;
+  }
+  #wrap {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  canvas {
+    display: block;
+    image-rendering: auto;
+    background: #05070f;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+    touch-action: none;
+  }
+  #boot {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: #05070f;
+    color: #9fb0d0;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    z-index: 5;
+    transition: opacity 0.3s;
+  }
+  #boot.gone { opacity: 0; pointer-events: none; }
+  #err {
+    position: fixed;
+    inset: auto 0 0 0;
+    max-height: 45%;
+    overflow: auto;
+    background: #2a0d12;
+    color: #ffb4bc;
+    font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace;
+    padding: 12px 16px;
+    white-space: pre-wrap;
+    z-index: 10;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="game" width="960" height="600" aria-label="Spider Web Swing game canvas" role="img"></canvas>
+  </div>
+  <div id="boot">Loading...</div>
+  <pre id="err"></pre>
+  <script>
+    // Surface module load errors instead of failing silently on a blank canvas.
+    window.addEventListener('error', (e) => {
+      const el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent += `\n${e.message}\n  ${e.filename}:${e.lineno}:${e.colno}`;
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+      const el = document.getElementById('err');
+      el.style.display = 'block';
+      el.textContent += `\nPromise: ${e.reason && (e.reason.stack || e.reason.message || e.reason)}`;
+    });
+  </script>
+  <script type="module">
+    import './src/main.js';
+    document.getElementById('boot').classList.add('gone');
+  </script>
+</body>
+</html>
