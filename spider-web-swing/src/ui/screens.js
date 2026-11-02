@@ -92,7 +92,7 @@ export class Screens {
     ctx.fillText('WEB SWING', viewW / 2, y + 100 + bob);
     ctx.fillStyle = 'rgba(255,255,255,0.55)';
     ctx.font = `600 13px ${FONT}`;
-    ctx.fillText('SWING  ·  CLIMB  ·  BE A HERO', viewW / 2, y + 126);
+    ctx.fillText('DESIGNED BY ANVESH  ·  NEW ERA', viewW / 2, y + 126);
     ctx.restore();
 
     const bw = w - 96;
