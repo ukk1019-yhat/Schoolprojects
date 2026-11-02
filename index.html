@@ -576,6 +576,163 @@
 .tag-snowman { background: #4f83cc; }
 .tag-ghost   { background: #7c3aed; }
 .tag-monster { background: #16a34a; }
+    .tag-spider  { background: #e11d48; }
+    .tag-action  { background: #e11d48; }
+
+    /* ========================================================
+       STUDENT SPOTLIGHT BANNER
+       ======================================================== */
+    .student-spotlight-card {
+      background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #f0fdf4 100%);
+      border: 1px solid #bfdbfe;
+      border-radius: 24px;
+      padding: 32px 36px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 30px -6px rgba(37, 99, 235, 0.08);
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .spotlight-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .spotlight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .spotlight-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2563eb;
+      animation: sparkleRotate 2s infinite ease-in-out;
+    }
+
+    .spotlight-heading {
+      font-size: clamp(22px, 2.6vw, 32px);
+      font-weight: 800;
+      color: #0b192c;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+    }
+
+    .spotlight-text {
+      font-size: 14.5px;
+      color: #475569;
+      line-height: 1.65;
+    }
+
+    .spotlight-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .spotlight-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(191, 219, 254, 0.6);
+      border-radius: 14px;
+      padding: 10px 14px;
+      backdrop-filter: blur(4px);
+    }
+
+    .feature-icon {
+      font-size: 20px;
+      line-height: 1;
+      padding-top: 2px;
+    }
+
+    .feature-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .feature-desc {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .spotlight-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spotlight-photo-frame {
+      position: relative;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 4px solid #ffffff;
+      box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.16);
+      cursor: pointer;
+      background: #0f172a;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .spotlight-photo-frame:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 20px 42px -6px rgba(15, 23, 42, 0.22);
+    }
+
+    .spotlight-photo {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .spotlight-photo-frame:hover .spotlight-photo {
+      transform: scale(1.03);
+    }
+
+    .spotlight-photo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 16px;
+      background: linear-gradient(to top, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.6) 70%, transparent 100%);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .zoom-pill {
+      background: rgba(37, 99, 235, 0.85);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
 
     /* Media Count Tag (top-right) */
     .tag-media {
@@ -1183,26 +1340,75 @@
           </span>
         </h1>
         <p class="hero-subtitle">
-          Every game here was designed by students of New Era. Play, explore and see their creativity come to life!
+          These games were developed by these talented students of New Era The World School! Every game here was designed, programmed, and built by our young creators. Play, explore and celebrate their creativity!
         </p>
         <div class="hero-stats">
           <div class="stat-pill">
-            <span>🎮</span> 5 Games
+            <span>🎮</span> 12+ Games
           </div>
           <div class="stat-pill">
-            <span>👤</span> 5 Student Creators
+            <span>👤</span> 10+ Student Creators
           </div>
           <div class="stat-pill">
-            <span>🏆</span> Play • Learn • Support
+            <span>🏆</span> Certificate of Innovation
           </div>
         </div>
       </div>
 
       <div class="hero-right">
         <div class="hero-illustration-wrapper">
-          <img class="hero-illustration" src="assets/hero-students.jpg" alt="Students building games">
+          <img class="hero-illustration" src="assets/new-era-students-group.jpg" alt="Students of New Era The World School who developed these games" style="cursor:pointer;" onclick="openMediaModal('Our Student Developers', 'assets/new-era-students-group.jpg', 'Certificate Ceremony at New Era The World School')">
           <div class="student-made-badge">
-            <span>🚀</span> Student Made!
+            <span>🎓</span> Student Developers!
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ========================================================
+         STUDENT DEVELOPERS SPOTLIGHT SECTION
+         ======================================================== -->
+    <section class="student-spotlight-card">
+      <div class="spotlight-left">
+        <div class="spotlight-badge">
+          <span class="spotlight-badge-dot"></span>
+          OFFICIAL STUDENT SHOWCASE • NEW ERA THE WORLD SCHOOL
+        </div>
+        <h2 class="spotlight-heading">These Games Were Developed by These Students! 🌟</h2>
+        <p class="spotlight-text">
+          Every single game on this platform was designed and built by the young creators of <strong>New Era The World School</strong> in collaboration with <strong>Edu Alt Tech</strong>. From physics engines and fast-paced sports to tricky mazes and superhero web-swinging, these students brought their dream games to life!
+        </p>
+        <div class="spotlight-grid">
+          <div class="spotlight-feature">
+            <div class="feature-icon">🚀</div>
+            <div>
+              <div class="feature-title">Real Student Code</div>
+              <div class="feature-desc">Canvas graphics, player controls, custom audio & physics engines</div>
+            </div>
+          </div>
+          <div class="spotlight-feature">
+            <div class="feature-icon">💡</div>
+            <div>
+              <div class="feature-title">Original Ideas</div>
+              <div class="feature-desc">Unique gameplay crafted by Grade 1 to 5 student innovators</div>
+            </div>
+          </div>
+          <div class="spotlight-feature">
+            <div class="feature-icon">🏅</div>
+            <div>
+              <div class="feature-title">Certified Innovators</div>
+              <div class="feature-desc">Proudly holding certificates of game development achievement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="spotlight-right">
+        <div class="spotlight-photo-frame" onclick="openMediaModal('New Era Student Innovators', 'assets/new-era-students-group.jpg', 'Certificate Ceremony at New Era The World School')">
+          <img src="assets/new-era-students-group.jpg" alt="New Era The World School students holding certificates for developing games" class="spotlight-photo">
+          <div class="spotlight-photo-caption">
+            <span>📸 Certificate Ceremony • New Era The World School</span>
+            <span class="zoom-pill">🔍 Click to View Full</span>
           </div>
         </div>
       </div>
@@ -1215,6 +1421,9 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/></svg>
           All Games
         </button>
+        <button class="filter-btn" data-cat="action" onclick="filterCategory('action', this)">
+          <span>🕸️</span> Action
+        </button>
         <button class="filter-btn" data-cat="cricket" onclick="filterCategory('cricket', this)">
           <span>🏏</span> Cricket
         </button>
@@ -1226,6 +1435,9 @@
         </button>
         <button class="filter-btn" data-cat="racing" onclick="filterCategory('racing', this)">
           <span>🚗</span> Racing
+        </button>
+        <button class="filter-btn" data-cat="sports" onclick="filterCategory('sports', this)">
+          <span>⚾</span> Sports
         </button>
         <button class="filter-btn" data-cat="other" onclick="filterCategory('other', this)">
           <span>⭐</span> Other
@@ -1253,6 +1465,42 @@
          CARDS GRID (4 COLUMNS)
          ======================================================== -->
     <div class="cards-grid" id="cardsGrid">
+      <!-- CARD: Spider: Web Swing -->
+      <article class="game-card" data-category="action" data-title="Spider: Web Swing" data-creator="Student Innovators">
+        <div class="card-thumb">
+          <img src="assets/spider-web-swing.jpg" alt="Spider Web Swing rooftop action game">
+          <span class="tag-category tag-action">Action</span>
+          <div class="tag-media">
+            <span>🕸️ 6 Levels</span>
+            <span>🏆 Achievements</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Spider: Web Swing</h2>
+          <p class="card-description">Swing across city skyscrapers on web lines, wall climb, dodge drones and wrap rogue bots! Choose cool suits, master swing physics and save the city rooftops.</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Student Innovators', 'Coding Club • School: New Era', 'Spider: Web Swing')">
+            <img class="creator-avatar" src="assets/new-era-students-group.jpg" alt="Student Innovators">
+            <div class="creator-info">
+              <div class="creator-name">Student Innovators</div>
+              <div class="creator-meta">Coding Club • School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="spider-web-swing/index.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Spider: Web Swing', 'assets/spider-web-swing.jpg', 'Web-swinging superhero rooftop action')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
 
       <!-- CARD 1: Bat & Ball -->
       <article class="game-card" data-category="cricket" data-title="Bat & Ball" data-creator="Sri Karthikeya Bhargav">
@@ -1358,9 +1606,10 @@
         </div>
       </article>
 
+      <!-- CARD: Ghost Scare -->
       <article class="game-card" data-category="other" data-title="Ghost Scare" data-creator="Kiara Jain">
         <div class="card-thumb">
-          <img src="assets/maze-chase.jpg" alt="Ghost Scare haunted house game">
+          <img src="assets/ghost-scare.jpg" alt="Ghost Scare haunted house game">
           <span class="tag-category tag-ghost">Ghost</span>
           <div class="tag-media">
             <span>👻 3 Houses</span>
@@ -1370,11 +1619,11 @@
           <h2 class="card-title">Ghost Scare</h2>
           <p class="card-description">You are the friendliest ghost in the haunted house! Sneak around, scare the humans with your abilities and earn coins before they all escape. Brave humans need bigger scares!</p>
 
-          <div class="creator-row" onclick="openCreatorModal('Kiara Jain', 'Student Creators', 'Ghost Scare')">
-            <img class="creator-avatar" src="logo.png" alt="Kiara Jain">
+          <div class="creator-row" onclick="openCreatorModal('Kiara Jain', 'Grade 4 • School: New Era', 'Ghost Scare')">
+            <img class="creator-avatar" src="assets/avatar-ruhi.jpg" alt="Kiara Jain">
             <div class="creator-info">
               <div class="creator-name">Kiara Jain</div>
-              <div class="creator-meta">Student Creators</div>
+              <div class="creator-meta">Grade 4 • School: New Era</div>
             </div>
             <span class="creator-chevron">›</span>
           </div>
@@ -1384,13 +1633,18 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Play Now
             </a>
+            <button class="btn-media" onclick="openMediaModal('Ghost Scare', 'assets/ghost-scare.jpg', 'Haunted house stealth & coin scares')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
           </div>
         </div>
       </article>
 
+      <!-- CARD: Snowman Showdown -->
       <article class="game-card" data-category="other" data-title="Snowman Showdown" data-creator="Rohika">
         <div class="card-thumb">
-          <img src="assets/maze-chase.jpg" alt="Snowman Showdown two mountain houses game">
+          <img src="assets/snowman-showdown.jpg" alt="Snowman Showdown two mountain houses game">
           <span class="tag-category tag-snowman">Snowman</span>
           <div class="tag-media">
             <span>❄ 2 Snowmen</span>
@@ -1400,11 +1654,11 @@
           <h2 class="card-title">Snowman Showdown</h2>
           <p class="card-description">Two houses on a quiet mountain. A boy knocks on a door, then goes home - and two snowmen come out to brawl! Punch, smash and throw snow across 6 mountain levels to fill your WARMTH, then call MOM and let the mothers end the fight in peace.</p>
           
-          <div class="creator-row" onclick="openCreatorModal('Rohika', 'School: New Era', 'Snowman Showdown')">
+          <div class="creator-row" onclick="openCreatorModal('Rohika', 'Grade 4 • School: New Era', 'Snowman Showdown')">
             <img class="creator-avatar" src="assets/avatar-nihan.jpg" alt="Rohika">
             <div class="creator-info">
               <div class="creator-name">Rohika</div>
-              <div class="creator-meta">School: New Era</div>
+              <div class="creator-meta">Grade 4 • School: New Era</div>
             </div>
             <span class="creator-chevron">›</span>
           </div>
@@ -1414,6 +1668,10 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Play Now
             </a>
+            <button class="btn-media" onclick="openMediaModal('Snowman Showdown', 'assets/snowman-showdown.jpg', 'Mountain cabin snowball brawl')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
           </div>
         </div>
       </article>
@@ -1493,7 +1751,7 @@
       <!-- CARD 6: Car Siri -->
       <article class="game-card" data-category="racing" data-title="Car Siri" data-creator="Pashwi Jain">
         <div class="card-thumb">
-          <img src="assets/car-siri.svg" alt="Car Siri race against rivals game">
+          <img src="assets/car-siri.jpg" alt="Car Siri race against rivals game">
           <span class="tag-category tag-racing">Racing</span>
           <div class="tag-media">
             <span>⏱ Time Attack</span>
@@ -1517,7 +1775,7 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Play Now
             </a>
-            <button class="btn-media" onclick="openMediaModal('Car Siri', 'assets/car-siri.svg', 'Race to the finish before time runs out')">
+            <button class="btn-media" onclick="openMediaModal('Car Siri', 'assets/car-siri.jpg', 'Race to the finish before time runs out')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               View Media
             </button>
@@ -1526,7 +1784,8 @@
       </article>
 
       <!-- CARD 7: Basketball -->
-      <article class="game-card" data-category="other" data-title="Basketball" data-creator="Hanitha and Kaira Jain">
+      <!-- CARD: Basketball -->
+      <article class="game-card" data-category="sports" data-title="Basketball" data-creator="Hanitha and Kaira Jain">
         <div class="card-thumb">
           <img src="assets/basketball.png" alt="Basketball hoop shot game">
           <span class="tag-category tag-sports">Basketball</span>
@@ -1536,10 +1795,10 @@
         </div>
         <div class="card-body">
           <h2 class="card-title">Basketball</h2>
-          <p class="card-description">Shoot hoops for 2 and 3 points! Swish for a bonus, build your streak and beat the clock.</p>
+          <p class="card-description">Shoot hoops for 2 and 3 points! Swish for a bonus, build your streak and beat the clock in this fast-paced basketball challenge.</p>
           
           <div class="creator-row" onclick="openCreatorModal('Hanitha and Kaira Jain', 'School: New Era', 'Basketball')">
-            <img class="creator-avatar" src="logo.png" alt="Hanitha and Kaira Jain">
+            <img class="creator-avatar" src="assets/avatar-sri.jpg" alt="Hanitha and Kaira Jain">
             <div class="creator-info">
               <div class="creator-name">Hanitha and Kaira Jain</div>
               <div class="creator-meta">School: New Era</div>
@@ -1552,14 +1811,19 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Play Now
             </a>
+            <button class="btn-media" onclick="openMediaModal('Basketball', 'assets/basketball.png', 'Timed hoop shot arcade challenge')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
           </div>
         </div>
       </article>
 
       <!-- CARD 8: Baseball -->
-      <article class="game-card" data-category="other" data-title="Baseball" data-creator="Vekshith">
+      <!-- CARD: Baseball -->
+      <article class="game-card" data-category="sports" data-title="Baseball" data-creator="Vekshith">
         <div class="card-thumb">
-          <img src="assets/maze-chase.jpg" alt="Baseball homerun battle game">
+          <img src="assets/baseball.jpg" alt="Baseball homerun battle game">
           <span class="tag-category tag-sports">Baseball</span>
           <div class="tag-media">
             <span>⚡ 2 Player Battle</span>
@@ -1567,13 +1831,13 @@
         </div>
         <div class="card-body">
           <h2 class="card-title">Baseball</h2>
-          <p class="card-description">Pitch, swing and catch! Hit a homerun, out the rival and score more points to win the 2 player battle.</p>
+          <p class="card-description">Pitch, swing and catch! Hit a homerun, out the rival and score more points to win the 2 player battle in a packed stadium.</p>
           
-          <div class="creator-row" onclick="openCreatorModal('Vekshith', '1st Class', 'Baseball')">
-            <img class="creator-avatar" src="logo.png" alt="Vekshith">
+          <div class="creator-row" onclick="openCreatorModal('Vekshith', '1st Class • School: New Era', 'Baseball')">
+            <img class="creator-avatar" src="assets/avatar-sri.jpg" alt="Vekshith">
             <div class="creator-info">
               <div class="creator-name">Vekshith</div>
-              <div class="creator-meta">1st Class</div>
+              <div class="creator-meta">1st Class • School: New Era</div>
             </div>
             <span class="creator-chevron">›</span>
           </div>
@@ -1583,14 +1847,19 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Play Now
             </a>
+            <button class="btn-media" onclick="openMediaModal('Baseball', 'assets/baseball.jpg', 'Two-player homerun battle stadium')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
           </div>
         </div>
       </article>
 
       <!-- CARD 9: Monster Hunt -->
-      <article class="game-card" data-category="other" data-title="Monster Hunt" data-creator="Rohan">
+      <!-- CARD: Monster Hunt -->
+      <article class="game-card" data-category="action" data-title="Monster Hunt" data-creator="Rohan">
         <div class="card-thumb">
-          <img src="assets/maze-chase.jpg" alt="Monster Hunt secret house claw battle game">
+          <img src="assets/monster-hunt.jpg" alt="Monster Hunt secret house claw battle game">
           <span class="tag-category tag-monster">Monster</span>
           <div class="tag-media">
             <span>👹 5 Levels</span>
@@ -1601,7 +1870,7 @@
           <p class="card-description">You are the monster! Bad humans snuck into your secret house - claw them ALL before they catch you. Every level brings more humans... and they get stronger!</p>
           
           <div class="creator-row" onclick="openCreatorModal('Rohan', 'Grade 4 • School: New Era', 'Monster Hunt')">
-            <img class="creator-avatar" src="logo.png" alt="Rohan">
+            <img class="creator-avatar" src="assets/avatar-varun.jpg" alt="Rohan">
             <div class="creator-info">
               <div class="creator-name">Rohan</div>
               <div class="creator-meta">Grade 4 • School: New Era</div>
@@ -1614,6 +1883,47 @@
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               Play Now
             </a>
+            <button class="btn-media" onclick="openMediaModal('Monster Hunt', 'assets/monster-hunt.jpg', 'Secret house monster claw defense')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
+          </div>
+        </div>
+      </article>
+
+      
+      <!-- CARD: Phantom Rider: Spirit Run -->
+      <article class="game-card" data-category="racing" data-title="Phantom Rider: Spirit Run" data-creator="Student Innovators">
+        <div class="card-thumb">
+          <img src="assets/phantom-rider.jpg" alt="Phantom Rider neon spirit run arcade game">
+          <span class="tag-category tag-racing">Racing</span>
+          <div class="tag-media">
+            <span>⚡ Spirit Boost</span>
+            <span>⭐ High Score</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">Phantom Rider: Spirit Run</h2>
+          <p class="card-description">Speed through a futuristic neon highway on a spectral motorcycle! Gather spirit energy, trigger hyper boosts and dodge cyber obstacles.</p>
+          
+          <div class="creator-row" onclick="openCreatorModal('Student Innovators', 'School: New Era', 'Phantom Rider: Spirit Run')">
+            <img class="creator-avatar" src="assets/new-era-students-group.jpg" alt="Student Innovators">
+            <div class="creator-info">
+              <div class="creator-name">Student Innovators</div>
+              <div class="creator-meta">School: New Era</div>
+            </div>
+            <span class="creator-chevron">›</span>
+          </div>
+
+          <div class="card-actions">
+            <a href="ghost-rider.html" class="btn-play">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Play Now
+            </a>
+            <button class="btn-media" onclick="openMediaModal('Phantom Rider: Spirit Run', 'assets/phantom-rider.jpg', 'Neon motorcycle arcade speed run')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              View Media
+            </button>
           </div>
         </div>
       </article>
@@ -1880,41 +2190,96 @@
     }
 
     // Media Modal handling
-    const mediaCatalog = {
+        const mediaCatalog = {
+      'Spider: Web Swing': {
+        img: 'assets/spider-web-swing.jpg',
+        gameLink: 'spider-web-swing/index.html',
+        gallery: ['assets/spider-web-swing.jpg', 'assets/new-era-students-group.jpg']
+      },
       'Bat & Ball': {
         img: 'assets/bat-and-ball.jpg',
         gameLink: 'bat-and-ball.html',
-        gallery: ['assets/bat-and-ball.jpg', 'assets/cricket-hitter.jpg', 'assets/hero-students.jpg']
+        gallery: ['assets/bat-and-ball.jpg', 'assets/cricket-hitter.jpg', 'assets/new-era-students-group.jpg']
       },
       'Treasure Guard': {
         img: 'assets/treasure-guard.jpg',
         gameLink: 'treasure-guard.html',
-        gallery: ['assets/treasure-guard.jpg', 'assets/student-gallery.jpg', 'assets/hero-students.jpg']
+        gallery: ['assets/treasure-guard.jpg', 'assets/student-gallery.jpg', 'assets/new-era-students-group.jpg']
+      },
+      'Maze Chase': {
+        img: 'assets/maze-chase.jpg',
+        gameLink: 'maze-chase.html',
+        gallery: ['assets/maze-chase.jpg', 'assets/new-era-students-group.jpg']
+      },
+      'Ghost Scare': {
+        img: 'assets/ghost-scare.jpg',
+        gameLink: 'ghost-scare.html',
+        gallery: ['assets/ghost-scare.jpg', 'assets/new-era-students-group.jpg']
+      },
+      'Snowman Showdown': {
+        img: 'assets/snowman-showdown.jpg',
+        gameLink: 'snowman-showdown.html',
+        gallery: ['assets/snowman-showdown.jpg', 'assets/new-era-students-group.jpg']
       },
       'Cricket Hitter': {
         img: 'assets/cricket-hitter.jpg',
         gameLink: 'cricket-hitter.html',
-        gallery: ['assets/cricket-hitter.jpg', 'assets/bat-and-ball.jpg', 'assets/hero-students.jpg']
+        gallery: ['assets/cricket-hitter.jpg', 'assets/bat-and-ball.jpg', 'assets/new-era-students-group.jpg']
       },
       'Highway Dash': {
         img: 'assets/highway-dash.jpg',
         gameLink: 'car-dash.html',
-        gallery: ['assets/highway-dash.jpg', 'assets/student-gallery.jpg', 'assets/hero-students.jpg']
+        gallery: ['assets/highway-dash.jpg', 'assets/car-siri.jpg', 'assets/new-era-students-group.jpg']
       },
       'Car Siri': {
-        img: 'assets/car-siri.svg',
+        img: 'assets/car-siri.jpg',
         gameLink: 'car-siri.html',
-        gallery: ['assets/car-siri.svg', 'assets/highway-dash.jpg', 'assets/hero-students.jpg']
+        gallery: ['assets/car-siri.jpg', 'assets/highway-dash.jpg', 'assets/new-era-students-group.jpg']
+      },
+      'Basketball': {
+        img: 'assets/basketball.png',
+        gameLink: 'basketball.html',
+        gallery: ['assets/basketball.png', 'assets/baseball.jpg', 'assets/new-era-students-group.jpg']
+      },
+      'Baseball': {
+        img: 'assets/baseball.jpg',
+        gameLink: 'baseball.html',
+        gallery: ['assets/baseball.jpg', 'assets/basketball.png', 'assets/new-era-students-group.jpg']
+      },
+      'Monster Hunt': {
+        img: 'assets/monster-hunt.jpg',
+        gameLink: 'monster-hunt.html',
+        gallery: ['assets/monster-hunt.jpg', 'assets/new-era-students-group.jpg']
+      },
+      'Phantom Rider: Spirit Run': {
+        img: 'assets/phantom-rider.jpg',
+        gameLink: 'ghost-rider.html',
+        gallery: ['assets/phantom-rider.jpg', 'assets/highway-dash.jpg', 'assets/new-era-students-group.jpg']
       },
       'Student Gallery': {
         img: 'assets/student-gallery.jpg',
         gameLink: '#',
-        gallery: ['assets/student-gallery.jpg', 'assets/hero-students.jpg', 'assets/creators-banner.jpg']
+        gallery: ['assets/student-gallery.jpg', 'assets/new-era-students-group.jpg', 'assets/creators-banner.jpg']
       },
       'Student Videos': {
         img: 'assets/student-videos.jpg',
         gameLink: '#',
-        gallery: ['assets/student-videos.jpg', 'assets/hero-students.jpg', 'assets/creators-banner.jpg']
+        gallery: ['assets/student-videos.jpg', 'assets/new-era-students-group.jpg', 'assets/creators-banner.jpg']
+      },
+      'Our Student Developers': {
+        img: 'assets/new-era-students-group.jpg',
+        gameLink: '#',
+        gallery: ['assets/new-era-students-group.jpg', 'assets/spider-web-swing.jpg', 'assets/bat-and-ball.jpg']
+      },
+      'New Era Student Innovators': {
+        img: 'assets/new-era-students-group.jpg',
+        gameLink: '#',
+        gallery: ['assets/new-era-students-group.jpg', 'assets/spider-web-swing.jpg', 'assets/baseball.jpg']
+      },
+      'Student Creators Ceremony': {
+        img: 'assets/new-era-students-group.jpg',
+        gameLink: '#',
+        gallery: ['assets/new-era-students-group.jpg']
       }
     };
 
@@ -1979,16 +2344,22 @@
     }
 
     // Creator Modal handling
-    const creatorAvatars = {
+        const creatorAvatars = {
       'Sri Karthikeya Bhargav': 'assets/avatar-sri.jpg',
       'Ruhi Parinica Thayi': 'assets/avatar-ruhi.jpg',
       'Nihan': 'assets/avatar-nihan.jpg',
+      'Kiara Jain': 'assets/avatar-ruhi.jpg',
+      'Rohika': 'assets/avatar-nihan.jpg',
       'Karthikeya': 'assets/avatar-sri.jpg',
       'Rohan and Joesh': 'assets/avatar-varun.jpg',
       'Pashwi Jain': 'assets/avatar-srinivas.jpg',
-      'Hanitha and Kaira Jain': 'logo.png',
+      'Hanitha and Kaira Jain': 'assets/avatar-sri.jpg',
+      'Vekshith': 'assets/avatar-sri.jpg',
+      'Rohan': 'assets/avatar-varun.jpg',
       'Team Edu Alt Tech': 'logo.png',
-      'Student Innovators': 'assets/hero-students.jpg'
+      'Student Innovators': 'assets/new-era-students-group.jpg',
+      'New Era Coding Club': 'assets/new-era-students-group.jpg',
+      'Edu Alt Tech': 'logo.png'
     };
 
     function openCreatorModal(name, school, project) {
