@@ -157,6 +157,10 @@ canvas#game{position:fixed;inset:0;width:100%;height:100%;display:block}
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>%E2%AD%90</text></svg>">
 </head>
 <body>
+  <a href="index.html" id="backToHub" style="position:fixed; top:12px; left:12px; z-index:99; background:rgba(10,14,44,0.85); color:#ffffff; text-decoration:none; padding:8px 15px; border-radius:999px; font-size:13px; font-weight:700; border:1px solid rgba(87,230,255,0.3); backdrop-filter:blur(8px); display:inline-flex; align-items:center; gap:7px; transition:all 0.2s; box-shadow:0 4px 14px rgba(0,0,0,0.4);" onmouseover="this.style.background='rgba(87,230,255,0.25)'" onmouseout="this.style.background='rgba(10,14,44,0.85)'">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    All Games
+  </a>
 
 <canvas id="game" aria-label="Phantom Rider game area"></canvas>
 
@@ -200,6 +204,7 @@ canvas#game{position:fixed;inset:0;width:100%;height:100%;display:block}
     <div class="panel title-panel">
       <h1 class="game-title">Phantom Rider</h1>
       <p class="game-sub">Spirit Run</p>
+      <p style="font-size:12.5px; font-weight:700; color:#57e6ff; margin:3px 0 10px; letter-spacing:0.5px;">Developed by Kushwanth Sai • 4th Class • New Era</p>
       <div class="menu">
         <button class="btn btn-primary" data-act="play">Play</button>
         <button class="btn" data-act="levels">Level Select</button>
