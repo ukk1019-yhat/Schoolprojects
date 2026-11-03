@@ -579,159 +579,7 @@
     .tag-spider  { background: #e11d48; }
     .tag-action  { background: #e11d48; }
 
-    /* ========================================================
-       STUDENT SPOTLIGHT BANNER
-       ======================================================== */
-    .student-spotlight-card {
-      background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #f0fdf4 100%);
-      border: 1px solid #bfdbfe;
-      border-radius: 24px;
-      padding: 32px 36px;
-      margin-bottom: 32px;
-      box-shadow: 0 8px 30px -6px rgba(37, 99, 235, 0.08);
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      align-items: center;
-      gap: 32px;
-    }
-
-    .spotlight-left {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .spotlight-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      background: #dbeafe;
-      color: #1d4ed8;
-      border-radius: var(--radius-pill);
-      font-size: 11.5px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      width: fit-content;
-    }
-
-    .spotlight-badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #2563eb;
-      animation: sparkleRotate 2s infinite ease-in-out;
-    }
-
-    .spotlight-heading {
-      font-size: clamp(22px, 2.6vw, 32px);
-      font-weight: 800;
-      color: #0b192c;
-      line-height: 1.25;
-      letter-spacing: -0.5px;
-    }
-
-    .spotlight-text {
-      font-size: 14.5px;
-      color: #475569;
-      line-height: 1.65;
-    }
-
-    .spotlight-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .spotlight-feature {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.85);
-      border: 1px solid rgba(191, 219, 254, 0.6);
-      border-radius: 14px;
-      padding: 10px 14px;
-      backdrop-filter: blur(4px);
-    }
-
-    .feature-icon {
-      font-size: 20px;
-      line-height: 1;
-      padding-top: 2px;
-    }
-
-    .feature-title {
-      font-size: 13.5px;
-      font-weight: 800;
-      color: #0f172a;
-    }
-
-    .feature-desc {
-      font-size: 12px;
-      color: #64748b;
-      line-height: 1.4;
-    }
-
-    .spotlight-right {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .spotlight-photo-frame {
-      position: relative;
-      width: 100%;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 4px solid #ffffff;
-      box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.16);
-      cursor: pointer;
-      background: #0f172a;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-
-    .spotlight-photo-frame:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 20px 42px -6px rgba(15, 23, 42, 0.22);
-    }
-
-    .spotlight-photo {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.4s ease;
-    }
-
-    .spotlight-photo-frame:hover .spotlight-photo {
-      transform: scale(1.03);
-    }
-
-    .spotlight-photo-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 10px 16px;
-      background: linear-gradient(to top, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.6) 70%, transparent 100%);
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .zoom-pill {
-      background: rgba(37, 99, 235, 0.85);
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      font-size: 11px;
-      white-space: nowrap;
-    }
+    
 
 
     /* Media Count Tag (top-right) */
@@ -1265,6 +1113,210 @@
         text-align: center;
       }
     }
+  
+    /* ========================================================
+       MOBILE PHONE RESPONSIVE STYLES
+       ======================================================== */
+    .mobile-bottom-bar {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding-bottom: 74px; /* Space for mobile bottom bar */
+      }
+      .mobile-bottom-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 62px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-top: 1px solid var(--border-subtle);
+        z-index: 90;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 4px calc(env(safe-area-inset-bottom, 0px) + 2px);
+        box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+      }
+      .mobile-nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        padding: 6px 0;
+        transition: color 0.2s ease, transform 0.15s ease;
+      }
+      .mobile-nav-item:active {
+        transform: scale(0.94);
+      }
+      .mobile-nav-item.active {
+        color: var(--primary);
+      }
+      .hero-banner {
+        grid-template-columns: 1fr;
+        padding: 24px 20px;
+        gap: 22px;
+        border-radius: 20px;
+      }
+      .hero-title {
+        font-size: clamp(24px, 5vw, 36px);
+      }
+      .hero-subtitle {
+        font-size: 13.5px;
+      }
+      .hero-right {
+        justify-content: center;
+        width: 100%;
+      }
+      .hero-illustration-wrapper {
+        max-width: 100%;
+        max-height: 240px;
+      }
+      .hero-illustration {
+        max-height: 240px;
+      }
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        height: 60px;
+        padding: 0 14px;
+      }
+      .brand-name {
+        font-size: 18px;
+      }
+      .brand img {
+        width: 32px;
+        height: 32px;
+      }
+      .global-search {
+        display: none;
+      }
+      .main-content {
+        padding: 14px 12px 28px;
+      }
+      .hero-banner {
+        padding: 18px 14px;
+        gap: 18px;
+        margin-bottom: 20px;
+        border-radius: 18px;
+      }
+      .hero-stats {
+        gap: 8px;
+      }
+      .stat-pill {
+        padding: 6px 12px;
+        font-size: 11px;
+      }
+      .hero-illustration-wrapper {
+        max-height: 190px;
+      }
+      .hero-illustration {
+        max-height: 190px;
+      }
+      .controls-bar {
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .filter-pills {
+        width: 100%;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .filter-btn {
+        padding: 7px 14px;
+        font-size: 12.5px;
+      }
+      .controls-right {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .sort-wrapper, .sort-select {
+        width: 100%;
+      }
+      .card-search-box {
+        width: 100%;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .game-card {
+        border-radius: 16px;
+      }
+      .card-thumb {
+        height: 175px;
+      }
+      .card-body {
+        padding: 14px 14px 16px;
+      }
+      .card-title {
+        font-size: 16.5px;
+      }
+      .card-description {
+        font-size: 12px;
+        min-height: 48px;
+      }
+      .card-actions {
+        gap: 6px;
+      }
+      .btn-play {
+        height: 40px;
+        font-size: 12.5px;
+      }
+      .btn-media {
+        height: 40px;
+        padding: 0 12px;
+        font-size: 12px;
+      }
+      .modal-backdrop {
+        padding: 10px;
+      }
+      .modal-content {
+        max-height: 94vh;
+        border-radius: 16px;
+      }
+      .modal-header {
+        padding: 12px 16px;
+      }
+      .modal-title-group h3 {
+        font-size: 16px;
+      }
+      .modal-body {
+        padding: 12px 14px;
+      }
+      .modal-media-stage {
+        height: 220px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+      .modal-thumbnail-item {
+        flex: 0 0 76px;
+        height: 54px;
+      }
+      .modal-footer {
+        padding: 10px 14px;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1366,53 +1418,7 @@
     </section>
 
 
-    <!-- ========================================================
-         STUDENT DEVELOPERS SPOTLIGHT SECTION
-         ======================================================== -->
-    <section class="student-spotlight-card">
-      <div class="spotlight-left">
-        <div class="spotlight-badge">
-          <span class="spotlight-badge-dot"></span>
-          OFFICIAL STUDENT SHOWCASE • NEW ERA THE WORLD SCHOOL
-        </div>
-        <h2 class="spotlight-heading">These Games Were Developed by These Students! 🌟</h2>
-        <p class="spotlight-text">
-          Every single game on this platform was designed and built by the young creators of <strong>New Era The World School</strong> in collaboration with <strong>Edu Alt Tech</strong>. From physics engines and fast-paced sports to tricky mazes and superhero web-swinging, these students brought their dream games to life!
-        </p>
-        <div class="spotlight-grid">
-          <div class="spotlight-feature">
-            <div class="feature-icon">🚀</div>
-            <div>
-              <div class="feature-title">Real Student Code</div>
-              <div class="feature-desc">Canvas graphics, player controls, custom audio & physics engines</div>
-            </div>
-          </div>
-          <div class="spotlight-feature">
-            <div class="feature-icon">💡</div>
-            <div>
-              <div class="feature-title">Original Ideas</div>
-              <div class="feature-desc">Unique gameplay crafted by Grade 1 to 5 student innovators</div>
-            </div>
-          </div>
-          <div class="spotlight-feature">
-            <div class="feature-icon">🏅</div>
-            <div>
-              <div class="feature-title">Certified Innovators</div>
-              <div class="feature-desc">Proudly holding certificates of game development achievement</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="spotlight-right">
-        <div class="spotlight-photo-frame" onclick="openMediaModal('New Era Student Innovators', 'assets/new-era-students-group.jpg', 'Certificate Ceremony at New Era The World School')">
-          <img src="assets/new-era-students-group.jpg" alt="New Era The World School students holding certificates for developing games" class="spotlight-photo">
-          <div class="spotlight-photo-caption">
-            <span>📸 Certificate Ceremony • New Era The World School</span>
-            <span class="zoom-pill">🔍 Click to View Full</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <!-- FILTER & CONTROLS ROW -->
     <div class="controls-bar">
@@ -1928,32 +1934,32 @@
         </div>
       </article>
 
-      <!-- CARD: Student Gallery -->
-      <article class="game-card" data-category="other" data-title="Student Gallery" data-creator="New Era Innovators">
-        <div class="card-thumb" style="cursor:pointer;" onclick="openMediaModal('Student Gallery', 'assets/student-gallery.jpg', 'Google Drive Student Photo Showcase')">
-          <img src="assets/student-gallery.jpg" alt="Student Gallery Google Drive photos">
-          <span class="tag-category tag-images">Photos</span>
+      <!-- CARD: Student Photo Gallery -->
+      <article class="game-card" data-category="other" data-title="Student Photo Gallery" data-creator="New Era Innovators">
+        <div class="card-thumb" style="cursor:pointer;" onclick="openMediaModal('Student Photo Gallery', 'assets/new-era-students-group.jpg', '50 Photos • New Era The World School')">
+          <img src="assets/student-gallery.jpg" alt="Student Photo Gallery 50 photos">
+          <span class="tag-category tag-images">50 Photos</span>
           <div class="tag-media">
-            <span>📸 12+ Drive Photos</span>
+            <span>📸 50 Photos</span>
           </div>
         </div>
         <div class="card-body">
-          <h2 class="card-title">Student Gallery</h2>
-          <p class="card-description">Explore authentic photos of our student creators from New Era The World School in action! Coding workshops, game design sessions, and certificate ceremonies.</p>
+          <h2 class="card-title">Student Photo Gallery</h2>
+          <p class="card-description">Browse all 50 authentic photos of our student creators from New Era The World School! Coding workshops, game development sessions, robotics, and certificate ceremonies.</p>
           
-          <div class="creator-row" onclick="openCreatorModal('Student Innovators', 'New Era The World School', 'Student Gallery')">
+          <div class="creator-row" onclick="openCreatorModal('Student Innovators', 'New Era The World School', 'Student Photo Gallery')">
             <img class="creator-avatar" src="assets/new-era-students-group.jpg" alt="Student Innovators">
             <div class="creator-info">
               <div class="creator-name">New Era Innovators</div>
-              <div class="creator-meta">School: New Era • Workshops</div>
+              <div class="creator-meta">School: New Era • 50 Photos</div>
             </div>
             <span class="creator-chevron">›</span>
           </div>
 
           <div class="card-actions">
-            <button class="btn-play" onclick="openMediaModal('Student Gallery', 'assets/student-gallery.jpg', 'Google Drive Student Photo Showcase')">
+            <button class="btn-play" onclick="openMediaModal('Student Photo Gallery', 'assets/new-era-students-group.jpg', '50 Photos • New Era The World School')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              View Photos (12)
+              View Photos (50)
             </button>
             <a href="https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing" target="_blank" rel="noopener" class="btn-media" title="Open Google Drive Folder">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -1963,71 +1969,9 @@
         </div>
       </article>
 
-      <!-- CARD: Student Videos -->
-      <article class="game-card" data-category="other" data-title="Student Videos" data-creator="New Era Innovators">
-        <div class="card-thumb" style="cursor:pointer;" onclick="openMediaModal('Student Videos', 'assets/gallery/gallery-03.jpg', 'Student Workshop Demos & Presentations')">
-          <img src="assets/gallery/gallery-03.jpg" alt="Student Videos presenter whiteboard">
-          <span class="tag-category tag-videos">Videos & Demos</span>
-          <div class="tag-media">
-            <span>▶ Demos</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h2 class="card-title">Student Videos</h2>
-          <p class="card-description">Watch video recordings and demos made by our young creators. From game walkthroughs to project presentations!</p>
-          
-          <div class="creator-row" onclick="openCreatorModal('Student Innovators', 'New Era The World School', 'Student Videos')">
-            <img class="creator-avatar" src="assets/new-era-students-group.jpg" alt="Student Innovators">
-            <div class="creator-info">
-              <div class="creator-name">New Era Innovators</div>
-              <div class="creator-meta">School: New Era • Video Showcase</div>
-            </div>
-            <span class="creator-chevron">›</span>
-          </div>
+      
 
-          <div class="card-actions">
-            <button class="btn-play" onclick="openMediaModal('Student Videos', 'assets/gallery/gallery-03.jpg', 'Student Workshop Demos & Presentations')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Watch Demos
-            </button>
-            <a href="https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing" target="_blank" rel="noopener" class="btn-media" title="Open Google Drive Folder">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Drive
-            </a>
-          </div>
-        </div>
-      </article>
-
-      <!-- CARD 8: More from Our Creators -->
-      <article class="game-card" data-category="other" data-title="More from Our Creators" data-creator="Team Edu Alt Tech">
-        <div class="card-thumb">
-          <img src="assets/creators-banner.jpg" alt="Small Ideas Big Dreams Creators Banner">
-          <span class="tag-category tag-creators">Creators</span>
-          <div class="tag-media">
-            <span>🎮 5 Games</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <h2 class="card-title">More from Our Creators</h2>
-          <p class="card-description">Discover more games, projects and creative ideas from our talented students.</p>
-          
-          <div class="creator-row" onclick="openCreatorModal('Team Edu Alt Tech', 'Student Creators', 'Innovation Club')">
-            <img class="creator-avatar" src="logo.png" alt="Edu Alt Tech">
-            <div class="creator-info">
-              <div class="creator-name">Team Edu Alt Tech</div>
-              <div class="creator-meta">Student Creators</div>
-            </div>
-            <span class="creator-chevron">›</span>
-          </div>
-
-          <div class="card-actions">
-            <button class="btn-coming-soon">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Coming Soon
-            </button>
-          </div>
-        </div>
-      </article>
+      
 
     </div>
   </main>
@@ -2063,21 +2007,12 @@
         <button class="modal-close-btn" onclick="closeMediaModal()" title="Close">&times;</button>
       </div>
 
-      <div class="modal-tabs">
-        <button class="modal-tab active" id="tabMediaPhotos" onclick="switchModalTab('photos')">🖼 Photos / Screenshots</button>
-        <button class="modal-tab" id="tabMediaVideo" onclick="switchModalTab('video')">▶ Video Demo</button>
-      </div>
+      
 
       <div class="modal-body">
         <div class="modal-media-stage" id="modalMediaStage">
           <img id="modalMainImage" src="assets/bat-and-ball.jpg" alt="Selected Preview">
-          <div class="video-placeholder" id="modalVideoPlaceholder" style="display:none;">
-            <div class="play-circle" onclick="simulatePlayVideo()">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <p style="font-size:14px; font-weight:600;">Student Video Explainer &amp; Demo</p>
-          </div>
-        </div>
+          
 
         <div class="modal-thumbnails-strip" id="modalThumbStrip">
           <!-- Dynamically populated thumbnails -->
@@ -2127,15 +2062,18 @@
     // Navigation tab switching
     function switchNav(tab, el) {
       document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
-      if (el) el.classList.add('active');
+      document.querySelectorAll('.mobile-nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-nav') === tab);
+      });
+      if (el && el.classList.contains('nav-link')) el.classList.add('active');
 
       if (tab === 'games') {
         filterCategory('all', document.querySelector('.filter-btn[data-cat=all]'));
         document.getElementById('cardsGrid').scrollIntoView({ behavior: 'smooth' });
       } else if (tab === 'creators') {
-        openCreatorModal('Student Innovators', 'New Era School Club', '5 Innovative Student Games');
+        openCreatorModal('Student Innovators', 'New Era School Club', '12 Innovative Student Games');
       } else if (tab === 'media') {
-        openMediaModal('Student Media Gallery', 'assets/student-gallery.jpg', 'All Photos & Video Demonstrations');
+        openMediaModal('Student Photo Gallery', 'assets/new-era-students-group.jpg', '50 Authentic Photos • New Era The World School');
       } else {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -2199,6 +2137,230 @@
 
     // Media Modal handling
         const mediaCatalog = {
+      'Student Photo Gallery': {
+        img: 'assets/student-gallery.jpg',
+        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
+        gallery: [
+        "assets/new-era-students-group.jpg",
+        "assets/gallery/gallery-01.jpg",
+        "assets/gallery/gallery-02.jpg",
+        "assets/gallery/gallery-03.jpg",
+        "assets/gallery/gallery-04.jpg",
+        "assets/gallery/gallery-05.jpg",
+        "assets/gallery/gallery-06.jpg",
+        "assets/gallery/gallery-07.jpg",
+        "assets/gallery/gallery-08.jpg",
+        "assets/gallery/gallery-09.jpg",
+        "assets/gallery/gallery-10.jpg",
+        "assets/gallery/gallery-11.jpg",
+        "assets/gallery/gallery-12.jpg",
+        "assets/gallery/gallery-13.jpg",
+        "assets/gallery/gallery-14.jpg",
+        "assets/gallery/gallery-15.jpg",
+        "assets/gallery/gallery-16.jpg",
+        "assets/gallery/gallery-17.jpg",
+        "assets/gallery/gallery-18.jpg",
+        "assets/gallery/gallery-19.jpg",
+        "assets/gallery/gallery-20.jpg",
+        "assets/gallery/gallery-21.jpg",
+        "assets/gallery/gallery-22.jpg",
+        "assets/gallery/gallery-23.jpg",
+        "assets/gallery/gallery-24.jpg",
+        "assets/gallery/gallery-25.jpg",
+        "assets/gallery/gallery-26.jpg",
+        "assets/gallery/gallery-27.jpg",
+        "assets/gallery/gallery-29.jpg",
+        "assets/gallery/gallery-30.jpg",
+        "assets/gallery/gallery-31.jpg",
+        "assets/gallery/gallery-32.jpg",
+        "assets/gallery/gallery-33.jpg",
+        "assets/gallery/gallery-34.jpg",
+        "assets/gallery/gallery-35.jpg",
+        "assets/gallery/gallery-36.jpg",
+        "assets/gallery/gallery-37.jpg",
+        "assets/gallery/gallery-38.jpg",
+        "assets/gallery/gallery-39.jpg",
+        "assets/gallery/gallery-40.jpg",
+        "assets/gallery/gallery-41.jpg",
+        "assets/gallery/gallery-42.jpg",
+        "assets/gallery/gallery-43.jpg",
+        "assets/gallery/gallery-44.jpg",
+        "assets/gallery/gallery-45.jpg",
+        "assets/gallery/gallery-46.jpg",
+        "assets/gallery/gallery-47.jpg",
+        "assets/gallery/gallery-48.jpg",
+        "assets/gallery/gallery-49.jpg",
+        "assets/gallery/gallery-50.jpg"
+]
+      },
+      'Student Gallery': {
+        img: 'assets/student-gallery.jpg',
+        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
+        gallery: [
+        "assets/new-era-students-group.jpg",
+        "assets/gallery/gallery-01.jpg",
+        "assets/gallery/gallery-02.jpg",
+        "assets/gallery/gallery-03.jpg",
+        "assets/gallery/gallery-04.jpg",
+        "assets/gallery/gallery-05.jpg",
+        "assets/gallery/gallery-06.jpg",
+        "assets/gallery/gallery-07.jpg",
+        "assets/gallery/gallery-08.jpg",
+        "assets/gallery/gallery-09.jpg",
+        "assets/gallery/gallery-10.jpg",
+        "assets/gallery/gallery-11.jpg",
+        "assets/gallery/gallery-12.jpg",
+        "assets/gallery/gallery-13.jpg",
+        "assets/gallery/gallery-14.jpg",
+        "assets/gallery/gallery-15.jpg",
+        "assets/gallery/gallery-16.jpg",
+        "assets/gallery/gallery-17.jpg",
+        "assets/gallery/gallery-18.jpg",
+        "assets/gallery/gallery-19.jpg",
+        "assets/gallery/gallery-20.jpg",
+        "assets/gallery/gallery-21.jpg",
+        "assets/gallery/gallery-22.jpg",
+        "assets/gallery/gallery-23.jpg",
+        "assets/gallery/gallery-24.jpg",
+        "assets/gallery/gallery-25.jpg",
+        "assets/gallery/gallery-26.jpg",
+        "assets/gallery/gallery-27.jpg",
+        "assets/gallery/gallery-29.jpg",
+        "assets/gallery/gallery-30.jpg",
+        "assets/gallery/gallery-31.jpg",
+        "assets/gallery/gallery-32.jpg",
+        "assets/gallery/gallery-33.jpg",
+        "assets/gallery/gallery-34.jpg",
+        "assets/gallery/gallery-35.jpg",
+        "assets/gallery/gallery-36.jpg",
+        "assets/gallery/gallery-37.jpg",
+        "assets/gallery/gallery-38.jpg",
+        "assets/gallery/gallery-39.jpg",
+        "assets/gallery/gallery-40.jpg",
+        "assets/gallery/gallery-41.jpg",
+        "assets/gallery/gallery-42.jpg",
+        "assets/gallery/gallery-43.jpg",
+        "assets/gallery/gallery-44.jpg",
+        "assets/gallery/gallery-45.jpg",
+        "assets/gallery/gallery-46.jpg",
+        "assets/gallery/gallery-47.jpg",
+        "assets/gallery/gallery-48.jpg",
+        "assets/gallery/gallery-49.jpg",
+        "assets/gallery/gallery-50.jpg"
+]
+      },
+      'Student Media Gallery': {
+        img: 'assets/student-gallery.jpg',
+        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
+        gallery: [
+        "assets/new-era-students-group.jpg",
+        "assets/gallery/gallery-01.jpg",
+        "assets/gallery/gallery-02.jpg",
+        "assets/gallery/gallery-03.jpg",
+        "assets/gallery/gallery-04.jpg",
+        "assets/gallery/gallery-05.jpg",
+        "assets/gallery/gallery-06.jpg",
+        "assets/gallery/gallery-07.jpg",
+        "assets/gallery/gallery-08.jpg",
+        "assets/gallery/gallery-09.jpg",
+        "assets/gallery/gallery-10.jpg",
+        "assets/gallery/gallery-11.jpg",
+        "assets/gallery/gallery-12.jpg",
+        "assets/gallery/gallery-13.jpg",
+        "assets/gallery/gallery-14.jpg",
+        "assets/gallery/gallery-15.jpg",
+        "assets/gallery/gallery-16.jpg",
+        "assets/gallery/gallery-17.jpg",
+        "assets/gallery/gallery-18.jpg",
+        "assets/gallery/gallery-19.jpg",
+        "assets/gallery/gallery-20.jpg",
+        "assets/gallery/gallery-21.jpg",
+        "assets/gallery/gallery-22.jpg",
+        "assets/gallery/gallery-23.jpg",
+        "assets/gallery/gallery-24.jpg",
+        "assets/gallery/gallery-25.jpg",
+        "assets/gallery/gallery-26.jpg",
+        "assets/gallery/gallery-27.jpg",
+        "assets/gallery/gallery-29.jpg",
+        "assets/gallery/gallery-30.jpg",
+        "assets/gallery/gallery-31.jpg",
+        "assets/gallery/gallery-32.jpg",
+        "assets/gallery/gallery-33.jpg",
+        "assets/gallery/gallery-34.jpg",
+        "assets/gallery/gallery-35.jpg",
+        "assets/gallery/gallery-36.jpg",
+        "assets/gallery/gallery-37.jpg",
+        "assets/gallery/gallery-38.jpg",
+        "assets/gallery/gallery-39.jpg",
+        "assets/gallery/gallery-40.jpg",
+        "assets/gallery/gallery-41.jpg",
+        "assets/gallery/gallery-42.jpg",
+        "assets/gallery/gallery-43.jpg",
+        "assets/gallery/gallery-44.jpg",
+        "assets/gallery/gallery-45.jpg",
+        "assets/gallery/gallery-46.jpg",
+        "assets/gallery/gallery-47.jpg",
+        "assets/gallery/gallery-48.jpg",
+        "assets/gallery/gallery-49.jpg",
+        "assets/gallery/gallery-50.jpg"
+]
+      },
+      'New Era Student Photo Gallery': {
+        img: 'assets/student-gallery.jpg',
+        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
+        gallery: [
+        "assets/new-era-students-group.jpg",
+        "assets/gallery/gallery-01.jpg",
+        "assets/gallery/gallery-02.jpg",
+        "assets/gallery/gallery-03.jpg",
+        "assets/gallery/gallery-04.jpg",
+        "assets/gallery/gallery-05.jpg",
+        "assets/gallery/gallery-06.jpg",
+        "assets/gallery/gallery-07.jpg",
+        "assets/gallery/gallery-08.jpg",
+        "assets/gallery/gallery-09.jpg",
+        "assets/gallery/gallery-10.jpg",
+        "assets/gallery/gallery-11.jpg",
+        "assets/gallery/gallery-12.jpg",
+        "assets/gallery/gallery-13.jpg",
+        "assets/gallery/gallery-14.jpg",
+        "assets/gallery/gallery-15.jpg",
+        "assets/gallery/gallery-16.jpg",
+        "assets/gallery/gallery-17.jpg",
+        "assets/gallery/gallery-18.jpg",
+        "assets/gallery/gallery-19.jpg",
+        "assets/gallery/gallery-20.jpg",
+        "assets/gallery/gallery-21.jpg",
+        "assets/gallery/gallery-22.jpg",
+        "assets/gallery/gallery-23.jpg",
+        "assets/gallery/gallery-24.jpg",
+        "assets/gallery/gallery-25.jpg",
+        "assets/gallery/gallery-26.jpg",
+        "assets/gallery/gallery-27.jpg",
+        "assets/gallery/gallery-29.jpg",
+        "assets/gallery/gallery-30.jpg",
+        "assets/gallery/gallery-31.jpg",
+        "assets/gallery/gallery-32.jpg",
+        "assets/gallery/gallery-33.jpg",
+        "assets/gallery/gallery-34.jpg",
+        "assets/gallery/gallery-35.jpg",
+        "assets/gallery/gallery-36.jpg",
+        "assets/gallery/gallery-37.jpg",
+        "assets/gallery/gallery-38.jpg",
+        "assets/gallery/gallery-39.jpg",
+        "assets/gallery/gallery-40.jpg",
+        "assets/gallery/gallery-41.jpg",
+        "assets/gallery/gallery-42.jpg",
+        "assets/gallery/gallery-43.jpg",
+        "assets/gallery/gallery-44.jpg",
+        "assets/gallery/gallery-45.jpg",
+        "assets/gallery/gallery-46.jpg",
+        "assets/gallery/gallery-47.jpg",
+        "assets/gallery/gallery-48.jpg",
+        "assets/gallery/gallery-49.jpg",
+        "assets/gallery/gallery-50.jpg"
+]
+      },
       'Spider: Web Swing': {
         img: 'assets/spider-web-swing.jpg',
         gameLink: 'spider-web-swing/index.html',
@@ -2264,54 +2426,6 @@
         gameLink: 'ghost-rider.html',
         gallery: ['assets/phantom-rider.jpg', 'assets/highway-dash.jpg', 'assets/new-era-students-group.jpg']
       },
-      'Student Gallery': {
-        img: 'assets/student-gallery.jpg',
-        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
-        gallery: [
-          'assets/student-gallery.jpg',
-          'assets/gallery/gallery-02.jpg',
-          'assets/gallery/gallery-03.jpg',
-          'assets/gallery/gallery-04.jpg',
-          'assets/gallery/gallery-05.jpg',
-          'assets/gallery/gallery-06.jpg',
-          'assets/gallery/gallery-07.jpg',
-          'assets/gallery/gallery-08.jpg',
-          'assets/gallery/gallery-09.jpg',
-          'assets/gallery/gallery-10.jpg',
-          'assets/gallery/gallery-11.jpg',
-          'assets/gallery/gallery-12.jpg',
-          'assets/new-era-students-group.jpg'
-        ]
-      },
-      'Student Media Gallery': {
-        img: 'assets/student-gallery.jpg',
-        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
-        gallery: [
-          'assets/student-gallery.jpg',
-          'assets/gallery/gallery-02.jpg',
-          'assets/gallery/gallery-03.jpg',
-          'assets/gallery/gallery-04.jpg',
-          'assets/gallery/gallery-05.jpg',
-          'assets/gallery/gallery-06.jpg',
-          'assets/gallery/gallery-07.jpg',
-          'assets/gallery/gallery-08.jpg',
-          'assets/gallery/gallery-09.jpg',
-          'assets/gallery/gallery-10.jpg',
-          'assets/gallery/gallery-11.jpg',
-          'assets/gallery/gallery-12.jpg',
-          'assets/new-era-students-group.jpg'
-        ]
-      },
-      'Student Videos': {
-        img: 'assets/gallery/gallery-03.jpg',
-        gameLink: 'https://drive.google.com/drive/folders/1H0X8TUVOdwfqVhRtqPnLfAzKsXlVRyoP?usp=sharing',
-        gallery: [
-          'assets/gallery/gallery-03.jpg',
-          'assets/gallery/gallery-04.jpg',
-          'assets/student-gallery.jpg',
-          'assets/new-era-students-group.jpg'
-        ]
-      },
       'Our Student Developers': {
         img: 'assets/new-era-students-group.jpg',
         gameLink: '#',
@@ -2332,12 +2446,25 @@
     function openMediaModal(title, imageSrc, subtitle) {
       const modal = document.getElementById('mediaModal');
       document.getElementById('modalTitle').textContent = title;
-      document.getElementById('modalSubtitle').textContent = subtitle || 'Media Showcase';
+      document.getElementById('modalSubtitle').textContent = subtitle || 'Photo Gallery';
 
-      const data = mediaCatalog[title] || { img: imageSrc, gameLink: '#', gallery: [imageSrc, 'assets/hero-students.jpg'] };
+      const data = mediaCatalog[title] || { img: imageSrc, gameLink: '#', gallery: [imageSrc, 'assets/new-era-students-group.jpg'] };
       document.getElementById('modalMainImage').src = data.img;
-      document.getElementById('modalPlayLink').href = data.gameLink || '#';
-      document.getElementById('modalPlayLink').style.display = data.gameLink && data.gameLink !== '#' ? 'inline-flex' : 'none';
+
+      const playBtn = document.getElementById('modalPlayLink');
+      if (data.gameLink && data.gameLink.includes('drive.google.com')) {
+        playBtn.href = data.gameLink;
+        playBtn.target = '_blank';
+        playBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Open Drive Folder';
+        playBtn.style.display = 'inline-flex';
+      } else if (data.gameLink && data.gameLink !== '#') {
+        playBtn.href = data.gameLink;
+        playBtn.target = '_self';
+        playBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Play Game';
+        playBtn.style.display = 'inline-flex';
+      } else {
+        playBtn.style.display = 'none';
+      }
 
       // Build thumbnail strip
       const strip = document.getElementById('modalThumbStrip');
@@ -2345,17 +2472,15 @@
       data.gallery.forEach((gSrc, index) => {
         const thumb = document.createElement('div');
         thumb.className = `modal-thumbnail-item ${index === 0 ? 'active' : ''}`;
-        thumb.innerHTML = `<img src="${gSrc}" alt="Thumbnail ${index + 1}">`;
+        thumb.innerHTML = `<img src="${gSrc}" alt="Photo ${index + 1}" loading="lazy">`;
         thumb.onclick = () => {
           strip.querySelectorAll('.modal-thumbnail-item').forEach(t => t.classList.remove('active'));
           thumb.classList.add('active');
           document.getElementById('modalMainImage').src = gSrc;
-          switchModalTab('photos');
         };
         strip.appendChild(thumb);
       });
 
-      switchModalTab('photos');
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -2366,28 +2491,9 @@
       document.body.style.overflow = '';
     }
 
-    function switchModalTab(tab) {
-      const photosTab = document.getElementById('tabMediaPhotos');
-      const videoTab = document.getElementById('tabMediaVideo');
-      const mainImg = document.getElementById('modalMainImage');
-      const videoPlaceholder = document.getElementById('modalVideoPlaceholder');
+    
 
-      if (tab === 'video') {
-        photosTab.classList.remove('active');
-        videoTab.classList.add('active');
-        mainImg.style.display = 'none';
-        videoPlaceholder.style.display = 'flex';
-      } else {
-        videoTab.classList.remove('active');
-        photosTab.classList.add('active');
-        videoPlaceholder.style.display = 'none';
-        mainImg.style.display = 'block';
-      }
-    }
-
-    function simulatePlayVideo() {
-      alert('Playing student game demo recording!');
-    }
+    
 
     // Creator Modal handling
         const creatorAvatars = {
@@ -2437,5 +2543,26 @@
       }
     });
   </script>
+
+  <!-- MOBILE BOTTOM NAVIGATION (Phones) -->
+  <nav class="mobile-bottom-bar" aria-label="Mobile Navigation">
+    <button class="mobile-nav-item active" data-nav="home" onclick="switchNav('home', this)">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="mobile-nav-item" data-nav="games" onclick="switchNav('games', this)">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4m10-2h.01m-3-2h.01"/></svg>
+      <span>Games</span>
+    </button>
+    <button class="mobile-nav-item" data-nav="creators" onclick="switchNav('creators', this)">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Creators</span>
+    </button>
+    <button class="mobile-nav-item" data-nav="media" onclick="switchNav('media', this)">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <span>Photos (50)</span>
+    </button>
+  </nav>
+
 </body>
 </html>
