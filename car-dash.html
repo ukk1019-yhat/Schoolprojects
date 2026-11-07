@@ -35,9 +35,107 @@
   #overlay button{ margin-top:16px; padding:14px 36px; font-size:clamp(16px,5vw,20px); font-weight:800;
     border:none; border-radius:999px; background:linear-gradient(#f7bb4d,#e67e22); color:#3a2500; cursor:pointer;
     box-shadow:0 6px 16px rgba(0,0,0,.5); }
+
+  /* Back to Games floating pill */
+  .back-to-hub {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 99;
+    background: rgba(15, 23, 42, 0.88);
+    color: #ffffff !important;
+    text-decoration: none;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .back-to-hub:active {
+    transform: scale(0.95);
+    background: rgba(37, 99, 235, 0.95);
+  }
+  @media (max-width: 600px) {
+    .back-to-hub {
+      top: 8px;
+      left: 8px;
+      padding: 5px 11px;
+      font-size: 11.5px;
+    }
+  }
+
+
+  .mobile-controls {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    padding: 0 16px;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 45;
+    pointer-events: none;
+  }
+  .ctrl-group {
+    display: flex;
+    gap: 12px;
+    pointer-events: auto;
+  }
+  .ctrl-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    background: rgba(11, 35, 54, 0.88);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .ctrl-btn:active {
+    transform: scale(0.92);
+    background: rgba(247, 187, 77, 0.95);
+    color: #0b2336;
+  }
+  .ctrl-btn.btn-turbo {
+    background: rgba(230, 126, 34, 0.9);
+    border-color: #ffd700;
+  }
+  @media (max-width: 900px), (pointer: coarse) {
+    .mobile-controls { display: flex; }
+  }
+  @media (max-width: 600px) {
+    #credit { font-size: 11px; padding: 4px 10px 0; }
+    h1 { font-size: 17px; margin: 2px 0; }
+    #topbar { padding: 4px 6px; gap: 4px; }
+    .pill { padding: 3px 8px; font-size: 11px; }
+    #rules { display: none; }
+    .ctrl-btn { width: 54px; height: 54px; font-size: 20px; }
+  }
+
 </style>
 </head>
 <body>
+  <a href="index.html" class="back-to-hub" title="Back to All Games">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    All Games
+  </a>
   <div id="credit">Prompted &amp; designed by <b>Joesh</b> &amp; <b>Rohan</b> &bull; School: New Era</div>
   <h1>&#128663; HIGHWAY DASH &#127937;</h1>
   <div id="topbar">
@@ -93,16 +191,16 @@ let drag = null;
 const COLORS = ['#e74c3c', '#3498db', '#8e44ad', '#f39c12', '#ecf0f1', '#2ecc71'];
 
 function fit() {
-  const availW = Math.max(300, window.innerWidth - 10);
-  const availH = Math.max(260, window.innerHeight - 190);
-  {
-    const ratio = availW / availH;
-    const R = Math.max(0.9, Math.min(ratio, 1.9));
-    H = Math.min(520, Math.round(availH));
-    if (H < 300) H = 300;
-    W = Math.round(H * R);
-    if (W > availW) { W = availW; H = Math.round(W / R); }
-  }
+  const isMobile = window.innerWidth <= 640;
+  const availW = Math.max(280, window.innerWidth - (isMobile ? 12 : 24));
+  const availH = Math.max(220, window.innerHeight - (isMobile ? 115 : 190));
+  const ratio = availW / availH;
+  const R = Math.max(0.65, Math.min(ratio, 1.9));
+  H = Math.min(520, Math.round(availH));
+  if (H < 220) H = 220;
+  W = Math.round(H * R);
+  if (W > availW) { W = availW; H = Math.round(W / R); }
+
   dpr = Math.min(window.devicePixelRatio || 1, 2);
   canvas.width = W * dpr;
   canvas.height = H * dpr;
@@ -696,8 +794,38 @@ function loop(now) {
 }
 
 fit();
+
+// Mobile touch button bindings
+function bindTouchKey(btnId, code) {
+  const el = document.getElementById(btnId);
+  if (!el) return;
+  const press = (e) => { e.preventDefault(); ensureAudio(); keys[code] = true; };
+  const release = (e) => { e.preventDefault(); keys[code] = false; };
+  el.addEventListener('pointerdown', press);
+  el.addEventListener('pointerup', release);
+  el.addEventListener('pointercancel', release);
+  el.addEventListener('pointerleave', release);
+}
+bindTouchKey('btnLeft', 'ArrowLeft');
+bindTouchKey('btnRight', 'ArrowRight');
+bindTouchKey('btnUp', 'ArrowUp');
+bindTouchKey('btnDown', 'ArrowDown');
+
 startReady();
 requestAnimationFrame(loop);
 </script>
+
+  <!-- Mobile on-screen driving controls -->
+  <div class="mobile-controls" id="mobileControls">
+    <div class="ctrl-group">
+      <button class="ctrl-btn" id="btnLeft" type="button" aria-label="Steer Left">◀</button>
+      <button class="ctrl-btn" id="btnRight" type="button" aria-label="Steer Right">▶</button>
+    </div>
+    <div class="ctrl-group">
+      <button class="ctrl-btn" id="btnDown" type="button" aria-label="Brake">▼</button>
+      <button class="ctrl-btn btn-turbo" id="btnUp" type="button" aria-label="Turbo Boost">⚡</button>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -161,9 +161,65 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
   }
+
+  /* Back to Games floating pill */
+  .back-to-hub {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 99;
+    background: rgba(15, 23, 42, 0.88);
+    color: #ffffff !important;
+    text-decoration: none;
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .back-to-hub:active {
+    transform: scale(0.95);
+    background: rgba(37, 99, 235, 0.95);
+  }
+  @media (max-width: 600px) {
+    .back-to-hub {
+      top: 8px;
+      left: 8px;
+      padding: 5px 11px;
+      font-size: 11.5px;
+    }
+  }
+
+
+  @media (max-width: 900px), (pointer: coarse) {
+    .touchui { display: block !important; }
+  }
+  @media (max-width: 600px) {
+    .dpad { left: 8px; bottom: 84px; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(2, 46px); gap: 5px; }
+    .dbtn { width: 46px; height: 46px; font-size: 17px; }
+    .actions { right: 8px; bottom: 84px; gap: 8px; }
+    .tbtn { width: 62px; height: 62px; font-size: 13px; }
+    .abilbar { gap: 4px; padding: 6px 8px; }
+    .abil { min-width: 68px; padding: 4px 6px; }
+    .abil .ai { font-size: 18px; }
+    .abil .an { font-size: 9.5px; }
+  }
+
 </style>
 </head>
 <body>
+  <a href="index.html" class="back-to-hub" title="Back to All Games">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+    All Games
+  </a>
 <div class="app" id="app">
   <header class="hud">
     <div class="hud-group hud-left">
